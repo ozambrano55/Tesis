@@ -1,0 +1,122 @@
+\chapter{Introducción}
+
+\section{Contexto y Planteamiento del Problema}
+
+En la era de la transformación digital y el análisis de datos masivos, la gestión efectiva del riesgo crediticio representa una oportunidad ideal para la aplicación de técnicas avanzadas de inteligencia de negocios. El sector mayorista de productos de juguetería, hogar, aseo y cocina en Ecuador genera diariamente volúmenes significativos de datos transaccionales que, mediante técnicas adecuadas de análisis predictivo, pueden transformarse en insights valiosos para la toma de decisiones crediticias.
+
+La empresa objeto de estudio, con más de 15 años de trayectoria en el mercado ecuatoriano, gestiona una cartera de 238 clientes activos distribuidos en 12 provincias del país, con un valor que supera el millón de dólares. A pesar de contar con un sistema de gestión de crédito tradicional, la compañía enfrenta desafíos significativos relacionados con la morosidad, que actualmente oscila entre el 12\% y el 18\% de la cartera total, dependiendo de la temporada.
+
+Los métodos convencionales de evaluación crediticia utilizados por la empresa se basan principalmente en el análisis histórico retrospectivo y criterios subjetivos, lo que resulta en:
+
+\begin{itemize}
+    \item Baja capacidad para anticipar problemas de pago (promedio de 3 días de antelación)
+    \item Precisión limitada en la identificación de clientes con alto riesgo (aproximadamente 60\%)
+    \item Escasa consideración de factores contextuales como ubicación geográfica y estacionalidad
+    \item Procesos manuales que consumen tiempo significativo del personal (promedio de 45 minutos por evaluación de cliente)
+\end{itemize}
+
+La disponibilidad de datos históricos desde 2017 proporciona un conjunto robusto de información para el entrenamiento de modelos de machine learning que puedan identificar patrones complejos en el comportamiento de pago. Como señala \cite{torres2023inteligencia}, la integración de técnicas de inteligencia artificial en sistemas de información crediticia puede mejorar la precisión de las predicciones de riesgo hasta en un 40\% comparado con métodos tradicionales.
+
+Este estudio aborda la necesidad de desarrollar un modelo predictivo adaptado específicamente a las particularidades del sector mayorista ecuatoriano, que permita identificar con anticipación el riesgo de morosidad y facilite la implementación de estrategias preventivas efectivas.
+
+\section{Preguntas de Investigación}
+
+\subsection{Pregunta Principal}
+
+¿De qué manera la implementación de un sistema de información basado en técnicas de machine learning puede optimizar la predicción del riesgo de morosidad en una cartera crediticia del sector mayorista ecuatoriano?
+
+\subsection{Preguntas Específicas}
+
+\begin{enumerate}
+    \item ¿Qué patrones y relaciones específicas en los datos históricos de comportamiento de pago pueden ser identificados mediante técnicas de minería de datos y cuál es su capacidad predictiva respecto a la morosidad futura?
+    
+    \item ¿Cómo pueden integrarse las variables estacionales y geográficas en un modelo de machine learning para mejorar la precisión de las predicciones de riesgo y en qué medida incrementan el poder predictivo del modelo?
+    
+    \item ¿Qué arquitectura de sistema de información es más efectiva para la implementación, mantenimiento y visualización de modelos predictivos en el contexto específico del comercio mayorista ecuatoriano?
+    
+    \item ¿Cuál es la efectividad del modelo predictivo implementado en comparación con los métodos tradicionales, medida en términos de precisión, tiempo de anticipación y reducción de la tasa de morosidad?
+\end{enumerate}
+
+\section{Idea a Defender}
+
+La implementación de un modelo de información que integre técnicas avanzadas de machine learning y análisis predictivo permitirá identificar con una precisión superior al 80\% el riesgo de morosidad en la cartera de clientes mayoristas, facilitando la automatización y optimización de la gestión crediticia con un impacto económico positivo cuantificable.
+
+\section{Objetivos}
+
+\subsection{Objetivo General}
+
+Desarrollar un modelo predictivo basado en técnicas de machine learning para la identificación temprana del riesgo de morosidad en la cartera crediticia de una empresa mayorista ecuatoriana, integrando datos históricos del período 2017-2024 para optimizar la toma de decisiones crediticias, con una precisión objetivo superior al 80\%.
+
+\subsection{Objetivos Específicos}
+
+\begin{enumerate}
+    \item Implementar un ciclo de vida de datos que integre y normalice la información histórica de comportamiento de pago, considerando variables como cupo de crédito, ubicación geográfica y estacionalidad, para generar un conjunto de datos estructurado y de alta calidad para el análisis predictivo.
+    
+    \item Aplicar técnicas de minería de datos y análisis estadístico para identificar patrones significativos y variables predictivas en el comportamiento de la cartera, evaluando su correlación con la probabilidad de morosidad futura.
+    
+    \item Desarrollar e implementar modelos de machine learning que se integren al sistema de información existente para la predicción automatizada del riesgo de morosidad, evaluando comparativamente el rendimiento de diferentes algoritmos.
+    
+    \item Crear un dashboard interactivo que permita la visualización y monitoreo en tiempo real de los indicadores de riesgo crediticio generados por el modelo predictivo, facilitando la interpretación y utilización de resultados por parte de los usuarios.
+    
+    \item Validar la efectividad del modelo implementado mediante un análisis comparativo con los métodos tradicionales, cuantificando la mejora en precisión, tiempo de anticipación y reducción de morosidad durante un período piloto.
+\end{enumerate}
+
+\section{Justificación}
+
+\subsection{Justificación Teórica}
+
+Este proyecto contribuye al campo de la inteligencia de negocios mediante la validación de técnicas avanzadas de machine learning aplicadas específicamente al sector mayorista ecuatoriano. La investigación genera conocimiento sobre la efectividad de diferentes algoritmos predictivos en el contexto de carteras crediticias comerciales, aportando al cuerpo teórico de la ciencia de datos aplicada.
+
+El estudio aborda un vacío significativo en la literatura existente sobre análisis crediticio en mercados latinoamericanos, donde la mayoría de los modelos se han desarrollado para contextos bancarios o de microfinanzas, con escasa atención a las particularidades del comercio mayorista. La integración de variables contextuales como estacionalidad y geografía en los modelos predictivos representa una contribución teórica relevante para el desarrollo de sistemas de información crediticia adaptados a realidades regionales específicas.
+
+\subsection{Justificación Metodológica}
+
+La investigación desarrolla una metodología sistemática para la elaboración de modelos predictivos en entornos con restricciones de datos, integrando técnicas de preparación de datos, selección de variables, entrenamiento de modelos y validación de resultados. Esta metodología podrá ser replicada y adaptada en contextos similares del sector comercial ecuatoriano y latinoamericano.
+
+La aplicación estructurada de la metodología CRISP-DM, adaptada a las particularidades del sector mayorista, representa un aporte metodológico significativo para la implementación de proyectos de minería de datos en empresas comerciales de tamaño medio, constituyendo un marco de referencia para iniciativas similares.
+
+\subsection{Justificación Práctica}
+
+El sistema desarrollado permite a la empresa optimizar su gestión de riesgo crediticio mediante:
+
+\begin{itemize}
+    \item Reducción potencial de la tasa de morosidad, con un impacto económico directo en la recuperación de cartera
+    
+    \item Automatización de la evaluación de riesgo, reduciendo significativamente el tiempo operativo dedicado a esta tarea
+    
+    \item Mejora en la toma de decisiones crediticias, basada en predicciones objetivas y cuantificables
+    
+    \item Optimización de los procesos de cobranza, priorizando casos según su nivel de riesgo
+    
+    \item Implementación de estrategias preventivas personalizadas, basadas en perfiles de riesgo específicos
+\end{itemize}
+
+La solución desarrollada tiene un impacto económico directo cuantificable, estimado en una reducción de incobrables superior a $50,000 \text{ anuales y una optimización operativa}$ valorada en aproximadamente $20,000 \text{ anuales en tiempo del personal}$.
+
+\section{Alcance del Estudio}
+
+El presente estudio tiene un alcance exploratorio-correlacional-explicativo, fundamentado en la metodología CRISP-DM (Cross-Industry Standard Process for Data Mining). Como señala \cite{hernandez2020metodologia}, este tipo de alcance permite no solo identificar patrones en los datos, sino también explicar las relaciones causales entre variables y desarrollar modelos con capacidad predictiva.
+
+La investigación comprende el análisis de datos históricos de comportamiento crediticio de 238 clientes de una empresa mayorista ecuatoriana, durante el período 2017-2024, incluyendo aproximadamente 150,000 registros transaccionales. El estudio se enfoca en el desarrollo e implementación de un modelo predictivo para la identificación temprana del riesgo de morosidad, integrando variables tradicionales de comportamiento de pago con factores contextuales como ubicación geográfica y estacionalidad.
+
+La validación del modelo se realiza mediante un período piloto de tres meses, durante el cual se evalúa su efectividad en términos de precisión, tiempo de anticipación y reducción de la tasa de morosidad, en comparación con los métodos tradicionales previamente utilizados por la empresa.
+
+El alcance del proyecto incluye el desarrollo completo del ciclo de vida del modelo predictivo, desde la preparación y análisis de datos hasta la implementación de un sistema de información con dashboard interactivo y alertas tempranas, así como la documentación de resultados y recomendaciones para su mantenimiento y evolución futura.
+
+\section{Estructura del Documento}
+
+El presente documento se estructura de la siguiente manera:
+
+\begin{itemize}
+    \item \textbf{Capítulo 1: Introducción}. Presenta el contexto, planteamiento del problema, objetivos, justificación y alcance del estudio.
+    
+    \item \textbf{Capítulo 2: Marco Teórico}. Desarrolla los fundamentos conceptuales de machine learning, análisis predictivo, gestión de riesgo crediticio y particularidades del sector mayorista ecuatoriano.
+    
+    \item \textbf{Capítulo 3: Metodología}. Detalla el diseño de la investigación y la aplicación de la metodología CRISP-DM en cada una de sus fases, incluyendo preparación de datos, modelado, evaluación e implementación.
+    
+    \item \textbf{Capítulo 4: Resultados y Discusión}. Presenta los resultados del análisis exploratorio, desarrollo del modelo predictivo, implementación del sistema y validación de efectividad, analizando su significado e implicaciones.
+    
+    \item \textbf{Capítulo 5: Conclusiones y Recomendaciones}. Sintetiza los principales hallazgos, conclusiones derivadas y recomendaciones para trabajo futuro.
+\end{itemize}
+
+Cada capítulo ha sido estructurado para abordar de manera sistemática los objetivos de investigación planteados, proporcionando una visión integral del desarrollo e implementación del modelo predictivo para la identificación temprana del riesgo de morosidad en carteras crediticias del sector mayorista ecuatoriano.

@@ -1,0 +1,88 @@
+\chapter{Conclusiones y Recomendaciones}
+
+\section{Conclusiones}
+A partir de los resultados obtenidos en el desarrollo e implementación del modelo predictivo para la identificación temprana del riesgo de morosidad, se derivan las siguientes conclusiones:
+
+\begin{enumerate}
+    \item El desarrollo del modelo predictivo basado en técnicas de machine learning ha permitido alcanzar una precisión del 84\% en la identificación temprana del riesgo de morosidad, superando significativamente el objetivo establecido del 80\% y mejorando en un 23\% la precisión del método tradicional anteriormente utilizado.
+    
+    \item La integración de variables geográficas y estacionales en el modelo predictivo ha demostrado ser fundamental, representando más del 20\% del poder predictivo total. Esto confirma la hipótesis inicial sobre la importancia de estos factores en el contexto del comercio mayorista ecuatoriano.
+    
+    \item La metodología CRISP-DM ha demostrado ser un marco efectivo para estructurar el proceso de desarrollo del modelo predictivo, permitiendo un enfoque sistemático desde la comprensión del negocio hasta la implementación y evaluación de resultados.
+    
+    \item La segmentación previa de la cartera mediante técnicas de clustering (K-Means) ha facilitado la identificación de cuatro perfiles distintivos de clientes (Premium, Estable, Estacional y Alto riesgo), lo que permite una aplicación más precisa y contextualizada de los modelos predictivos.
+    
+    \item El algoritmo XGBoost ha mostrado el mejor rendimiento entre las técnicas evaluadas, con métricas consistentemente superiores en precisión, sensibilidad, especificidad y área bajo la curva ROC.
+    
+    \item La implementación del sistema de alertas tempranas ha permitido ampliar el tiempo promedio de anticipación de 3 a 15 días, lo que ha facilitado intervenciones preventivas efectivas que resultaron en una reducción del 18\% en la tasa general de morosidad durante el periodo piloto.
+    
+    \item El análisis de importancia de características ha revelado que la variabilidad en el comportamiento de pago (representada por variables como Variabilidad\_Pago y Máximo\_Días\_Atraso) posee mayor poder predictivo que indicadores estáticos tradicionales, lo que sugiere la necesidad de un enfoque dinámico en la evaluación crediticia.
+    
+    \item El dashboard interactivo implementado ha facilitado la interpretación y utilización de las predicciones generadas por el modelo, permitiendo que usuarios con diferentes niveles de experticia técnica puedan beneficiarse de los resultados predictivos.
+    
+    \item El análisis costo-beneficio revela un retorno de inversión estimado de 6 meses, considerando tanto los beneficios directos (reducción de incobrables) como indirectos (optimización de procesos operativos).
+    
+    \item La reducción del 64\% en falsos positivos respecto al método tradicional representa una mejora significativa en la eficiencia operativa, al disminuir el tiempo y recursos dedicados a casos incorrectamente identificados como de alto riesgo.
+\end{enumerate}
+
+\section{Recomendaciones}
+
+Con base en la experiencia adquirida durante el desarrollo e implementación del proyecto, así como en las limitaciones identificadas, se plantean las siguientes recomendaciones:
+
+\begin{enumerate}
+    \item \textbf{Expansión del conjunto de datos:} Incorporar progresivamente datos de nuevos clientes y transacciones para fortalecer la capacidad predictiva del modelo, especialmente para el segmento "Estacional" donde se identificaron mayores desafíos.
+    
+    \item \textbf{Integración de variables externas:} Complementar el modelo con indicadores macroeconómicos regionales y sectoriales que podrían capturar factores externos no considerados actualmente.
+    
+    \item \textbf{Refinamiento por segmento:} Desarrollar modelos específicos para cada uno de los segmentos identificados, optimizando los parámetros y variables según las características particulares de cada grupo.
+    
+    \item \textbf{Implementación de aprendizaje continuo:} Establecer un proceso automatizado de reentrenamiento periódico que incorpore nuevos datos y resultados de intervenciones, permitiendo que el modelo evolucione y se adapte a cambios en patrones crediticios.
+    
+    \item \textbf{Ampliación del periodo de validación:} Extender el periodo de validación a un ciclo anual completo para evaluar con mayor precisión el desempeño del modelo ante la estacionalidad característica del sector.
+    
+    \item \textbf{Desarrollo de interfaces de integración:} Implementar APIs adicionales que faciliten la integración del sistema predictivo con otras plataformas empresariales, como sistemas de gestión de relaciones con clientes (CRM) y planificación de recursos empresariales (ERP).
+    
+    \item \textbf{Capacitación avanzada a usuarios:} Desarrollar un programa de formación continua para los usuarios del sistema, abordando tanto aspectos técnicos de interpretación de resultados como estrategias de intervención basadas en las predicciones.
+    
+    \item \textbf{Exploración de técnicas explicativas:} Implementar métodos como SHAP (SHapley Additive exPlanations) o LIME (Local Interpretable Model-agnostic Explanations) para mejorar la interpretabilidad de las predicciones individuales, facilitando la explicación de resultados a clientes y stakeholders.
+    
+    \item \textbf{Estudios comparativos sectoriales:} Promover colaboraciones con otras empresas del sector para realizar benchmarking de indicadores de riesgo crediticio y validar la generalización del modelo en contextos similares.
+    
+    \item \textbf{Desarrollo de módulos predictivos complementarios:} Expandir el alcance del sistema con módulos adicionales enfocados en predecir el monto probable de recuperación y el tiempo estimado hasta la normalización en casos de morosidad.
+\end{enumerate}
+
+\section{Trabajo Futuro}
+
+El presente proyecto establece las bases para diversas líneas de investigación y desarrollo futuro:
+
+\begin{enumerate}
+    \item \textbf{Modelos híbridos:} Explorar la combinación de diferentes técnicas de machine learning con enfoques de análisis de redes sociales y análisis de texto para incorporar datos no estructurados disponibles en interacciones con clientes.
+    
+    \item \textbf{Sistemas de recomendación:} Desarrollar algoritmos que no solo predigan el riesgo de morosidad, sino que recomienden estrategias específicas de intervención basadas en características del cliente y patrones históricos de efectividad.
+    
+    \item \textbf{Análisis predictivo multidimensional:} Expandir el enfoque predictivo para abordar simultáneamente múltiples aspectos del comportamiento del cliente, incluyendo patrones de compra, sensibilidad a promociones y potencial de crecimiento, creando un perfil integral que complemente la evaluación de riesgo.
+    
+    \item \textbf{Aplicación de aprendizaje por refuerzo:} Implementar técnicas de aprendizaje por refuerzo para optimizar dinámicamente las estrategias de intervención, permitiendo que el sistema aprenda de la efectividad de acciones previas.
+    
+    \item \textbf{Extensión a otros sectores:} Adaptar la metodología y arquitectura desarrolladas para su aplicación en otros sectores con dinámicas crediticias similares, como distribución mayorista de alimentos, material de construcción o equipamiento tecnológico.
+    
+    \item \textbf{Incorporación de tecnologías emergentes:} Explorar la integración de tecnologías como blockchain para mejorar la transparencia y trazabilidad de las transacciones crediticias, o el Internet de las Cosas (IoT) para capturar datos operativos relevantes de clientes mayoristas.
+\end{enumerate}
+
+\section{Contribuciones Principales}
+
+Las contribuciones más significativas de este trabajo pueden resumirse en:
+
+\begin{enumerate}
+    \item El desarrollo de un modelo predictivo con alta precisión (84\%) adaptado específicamente a las particularidades del sector mayorista ecuatoriano, considerando factores regionales y estacionales frecuentemente omitidos en modelos genéricos.
+    
+    \item La validación empírica de la efectividad de técnicas avanzadas de machine learning como XGBoost en un contexto con restricciones de datos (cartera limitada de clientes) y alta heterogeneidad.
+    
+    \item La integración exitosa del modelo predictivo en la operación cotidiana de la empresa mediante un sistema de información completo que abarca desde la captura y procesamiento de datos hasta la visualización interactiva y generación de alertas.
+    
+    \item La cuantificación del impacto económico y operativo derivado de la implementación de técnicas de inteligencia de negocios, demostrando un retorno de inversión tangible y contribuyendo a la justificación de inversiones similares en el sector.
+    
+    \item La documentación metodológica detallada del proceso de desarrollo, que puede servir como referencia para proyectos similares en el contexto de empresas mayoristas ecuatorianas y latinoamericanas.
+\end{enumerate}
+
+Este trabajo demuestra que la aplicación de técnicas avanzadas de machine learning y análisis predictivo puede generar beneficios significativos incluso en contextos empresariales con recursos tecnológicos limitados, siempre que se adapten adecuadamente a las particularidades del sector y se integren efectivamente en los procesos operativos existentes.

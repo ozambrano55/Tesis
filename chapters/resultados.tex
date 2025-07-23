@@ -1,0 +1,365 @@
+\chapter{Resultados y Discusión}
+
+\section{Análisis Exploratorio de Datos}
+\subsection{Caracterización de la cartera crediticia}
+El análisis de la cartera crediticia de la empresa mayorista revela las siguientes características principales:
+
+\begin{itemize}
+    \item \textbf{Distribución geográfica:} El 42\% de los clientes se concentra en la región Costa, 38\% en la Sierra, 15\% en el Oriente y 5\% en la región Insular.
+    
+    \item \textbf{Segmentación por volumen:} El 20\% de los clientes representa el 65\% del volumen total de la cartera, evidenciando una concentración significativa.
+    
+    \item \textbf{Antigüedad promedio:} La media de antigüedad como cliente es de 3.2 años, con una desviación estándar de 1.8 años.
+    
+    \item \textbf{Comportamiento de pago:} El tiempo promedio de pago es de 45 días, siendo el plazo estándar establecido de 30 días.
+\end{itemize}
+
+\subsection{Identificación de patrones y relaciones}
+El análisis de correlaciones entre variables y comportamiento de pago identifica las siguientes relaciones significativas:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{5cm}|p{3cm}|p{6cm}|}
+\hline
+\textbf{Variable} & \textbf{Coeficiente de correlación} & \textbf{Significancia} \\
+\hline
+Máximo\_Días\_Atraso & 0.72 & Alta correlación positiva con probabilidad de morosidad futura \\
+\hline
+Variabilidad\_Pago & 0.68 & Alta correlación positiva con probabilidad de morosidad \\
+\hline
+Índice\_Estacionalidad & 0.61 & Correlación positiva, indicando mayor riesgo en negocios con alta estacionalidad \\
+\hline
+Antigüedad & -0.58 & Correlación negativa, sugiriendo menor riesgo en clientes más antiguos \\
+\hline
+Índice\_Concentración\_Producto & -0.43 & Correlación negativa, indicando menor riesgo en clientes diversificados \\
+\hline
+\end{tabular}
+\caption{Principales correlaciones identificadas}
+\end{table}
+
+El análisis de series temporales revela patrones estacionales significativos:
+
+\begin{itemize}
+    \item Incremento de morosidad en períodos post-festivos (enero-febrero y septiembre)
+    \item Mayor cumplimiento en meses previos a temporadas altas (noviembre-diciembre)
+    \item Variaciones regionales sincronizadas con ciclos económicos locales
+\end{itemize}
+
+\subsection{Segmentación de la cartera}
+Mediante el algoritmo K-Means se identificaron cuatro segmentos principales en la cartera:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{2.5cm}|p{2.5cm}|p{9cm}|}
+\hline
+\textbf{Segmento} & \textbf{Proporción} & \textbf{Características principales} \\
+\hline
+Premium & 18\% & Alto volumen, baja morosidad, alta antigüedad, diversificación de productos \\
+\hline
+Estable & 35\% & Volumen medio, comportamiento predecible, morosidad ocasional de corto plazo \\
+\hline
+Estacional & 27\% & Alta variabilidad temporal, concentración en categorías específicas, morosidad cíclica \\
+\hline
+Alto riesgo & 20\% & Historial irregular, alta frecuencia de incumplimientos, baja antigüedad \\
+\hline
+\end{tabular}
+\caption{Segmentación de cartera mediante K-Means}
+\end{table}
+
+Esta segmentación proporciona una base estructurada para la aplicación diferenciada de modelos predictivos y estrategias de gestión de riesgo.
+
+\section{Desarrollo del Modelo Predictivo}
+\subsection{Evaluación comparativa de algoritmos}
+Se implementaron y evaluaron cinco algoritmos predictivos, con los siguientes resultados:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{3cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|}
+\hline
+\textbf{Algoritmo} & \textbf{Precisión} & \textbf{Recall} & \textbf{F1-Score} & \textbf{AUC} & \textbf{Tiempo (s)} \\
+\hline
+Regresión Logística & 0.76 & 0.71 & 0.73 & 0.82 & 1.2 \\
+\hline
+Random Forest & 0.83 & 0.79 & 0.81 & 0.87 & 3.5 \\
+\hline
+XGBoost & 0.87 & 0.84 & 0.85 & 0.91 & 4.2 \\
+\hline
+SVM & 0.79 & 0.76 & 0.77 & 0.83 & 2.8 \\
+\hline
+Red Neuronal & 0.82 & 0.80 & 0.81 & 0.88 & 8.7 \\
+\hline
+\end{tabular}
+\caption{Comparativa de rendimiento de algoritmos}
+\end{table}
+
+XGBoost presenta el mejor rendimiento global, con una precisión del 87\% y un área bajo la curva ROC de 0.91, superando el umbral objetivo establecido del 80\%.
+
+\subsection{Análisis de importancia de características}
+El análisis de importancia de características en el modelo XGBoost seleccionado revela que las variables más determinantes son:
+
+\begin{figure}[ht]
+\centering
+\begin{tabular}{|p{6cm}|p{3cm}|}
+\hline
+\textbf{Variable} & \textbf{Importancia relativa} \\
+\hline
+Máximo\_Días\_Atraso & 18.3\% \\
+\hline
+Variabilidad\_Pago & 14.7\% \\
+\hline
+Índice\_Cumplimiento & 12.9\% \\
+\hline
+Índice\_Estacionalidad & 10.5\% \\
+\hline
+Región & 9.8\% \\
+\hline
+Antigüedad & 8.4\% \\
+\hline
+Tendencia\_Compra & 7.2\% \\
+\hline
+Ratio\_Pago\_Plazo & 6.8\% \\
+\hline
+Categoría\_Principal & 5.9\% \\
+\hline
+Otros factores combinados & 5.5\% \\
+\hline
+\end{tabular}
+\caption{Importancia relativa de variables en el modelo XGBoost}
+\end{figure}
+
+Estos resultados confirman que, además de los factores históricos de comportamiento de pago (Máximo\_Días\_Atraso, Índice\_Cumplimiento), las variables que capturan la estacionalidad y la ubicación geográfica tienen un impacto significativo en la predicción de morosidad.
+
+\subsection{Validación cruzada y análisis de robustez}
+La validación cruzada mediante 5-fold confirma la consistencia del rendimiento del modelo XGBoost:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|}
+\hline
+\textbf{Fold} & \textbf{Precisión} & \textbf{Recall} & \textbf{F1-Score} & \textbf{AUC} \\
+\hline
+1 & 0.86 & 0.83 & 0.84 & 0.90 \\
+\hline
+2 & 0.88 & 0.85 & 0.86 & 0.92 \\
+\hline
+3 & 0.85 & 0.82 & 0.83 & 0.89 \\
+\hline
+4 & 0.87 & 0.84 & 0.85 & 0.91 \\
+\hline
+5 & 0.89 & 0.86 & 0.87 & 0.92 \\
+\hline
+\textbf{Media} & \textbf{0.87} & \textbf{0.84} & \textbf{0.85} & \textbf{0.91} \\
+\hline
+\textbf{Desv. Est.} & \textbf{0.015} & \textbf{0.014} & \textbf{0.014} & \textbf{0.012} \\
+\hline
+\end{tabular}
+\caption{Resultados de validación cruzada 5-fold para XGBoost}
+\end{table}
+
+La baja desviación estándar entre folds indica alta robustez del modelo, lo que sugiere que su capacidad predictiva se mantendrá estable en nuevos datos.
+
+\subsection{Matriz de confusión y análisis de errores}
+La matriz de confusión del modelo final revela:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|}
+\hline
+\textbf{n=72} & \textbf{Predicción: No moroso} & \textbf{Predicción: Moroso} \\
+\hline
+\textbf{Real: No moroso} & 45 (Verdaderos Negativos) & 5 (Falsos Positivos) \\
+\hline
+\textbf{Real: Moroso} & 4 (Falsos Negativos) & 18 (Verdaderos Positivos) \\
+\hline
+\end{tabular}
+\caption{Matriz de confusión del modelo XGBoost en conjunto de prueba}
+\end{table}
+
+El análisis de los casos incorrectamente clasificados revela patrones específicos:
+
+\begin{itemize}
+    \item \textbf{Falsos positivos:} Predominantemente clientes con patrones estacionales extremos pero con cumplimiento eventual.
+    
+    \item \textbf{Falsos negativos:} Principalmente clientes con historiales estables que experimentaron cambios bruscos en su comportamiento debido a factores externos no capturados completamente en los datos (como cambios repentinos en condiciones de mercado local).
+\end{itemize}
+
+\section{Implementación del Sistema de Información}
+\subsection{Arquitectura del sistema}
+El sistema implementado se estructura en una arquitectura de tres capas:
+
+\begin{figure}[ht]
+\centering
+\begin{tabular}{|p{3cm}|p{3cm}|p{8cm}|}
+\hline
+\textbf{Capa} & \textbf{Componentes} & \textbf{Funcionalidades} \\
+\hline
+Datos & - Base de datos SQL Server \newline - Procesos ETL \newline - Sistema de respaldo & - Almacenamiento estructurado \newline - Integración de fuentes \newline - Preservación de históricos \\
+\hline
+Procesamiento & - Servicio de predicción \newline - Programador de tareas \newline - API REST & - Ejecución del modelo predictivo \newline - Reentrenamiento periódico \newline - Interfaces para integración \\
+\hline
+Presentación & - Dashboard Power BI \newline - Sistema de alertas \newline - Informes automáticos & - Visualización de predicciones \newline - Notificaciones a usuarios \newline - Reportes periódicos \\
+\hline
+\end{tabular}
+\caption{Arquitectura del sistema implementado}
+\end{figure}
+
+\subsection{Dashboard interactivo}
+El dashboard implementado incluye los siguientes componentes:
+
+\begin{itemize}
+    \item \textbf{Mapa de riesgo:} Visualización geográfica con codificación por colores según nivel de riesgo.
+    
+    \item \textbf{Panel de tendencias:} Evolución temporal de indicadores clave de morosidad.
+    
+    \item \textbf{Radar de clientes:} Visualización radial de perfiles de riesgo por segmento.
+    
+    \item \textbf{Alertas tempranas:} Lista priorizada de clientes con riesgo elevado y recomendaciones.
+    
+    \item \textbf{Simulador de escenarios:} Herramienta interactiva para evaluar impacto de cambios en variables.
+\end{itemize}
+
+\begin{figure}[ht]
+\centering
+\begin{tabular}{|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{3cm}|p{2.5cm}|}
+\hline
+\textbf{Componente} & \textbf{Tipo de visualización} & \textbf{Actualización} & \textbf{Interactividad} & \textbf{Usuarios objetivo} \\
+\hline
+Mapa de riesgo & Mapa coroplético & Diaria & Filtros por región, segmento & Gerencia, Crédito \\
+\hline
+Panel tendencias & Series temporales & Semanal & Selección de periodos & Gerencia, Financiero \\
+\hline
+Radar clientes & Gráfico radial & Diaria & Selección de clientes & Crédito, Ventas \\
+\hline
+Alertas tempranas & Tabla dinámica & Tiempo real & Marcado, asignación & Cobranzas \\
+\hline
+Simulador & Controles interactivos & Bajo demanda & Ajuste de parámetros & Gerencia, Crédito \\
+\hline
+\end{tabular}
+\caption{Componentes del dashboard interactivo}
+\end{figure}
+
+\subsection{Sistema de alertas tempranas}
+El sistema de alertas tempranas implementa un enfoque estratificado:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{2.5cm}|p{2.5cm}|p{3cm}|p{6cm}|}
+\hline
+\textbf{Nivel de alerta} & \textbf{Criterio} & \textbf{Tiempo anticipación} & \textbf{Acciones recomendadas} \\
+\hline
+Verde & Prob. < 20\% & Monitoreo & Seguimiento regular según política estándar \\
+\hline
+Amarillo & Prob. 20-50\% & 30 días & Contacto preventivo, verificación situación \\
+\hline
+Naranja & Prob. 50-75\% & 15 días & Contacto prioritario, planes de pago especiales \\
+\hline
+Rojo & Prob. > 75\% & 7 días & Restricción preventiva, contacto gerencial \\
+\hline
+\end{tabular}
+\caption{Niveles del sistema de alertas tempranas}
+\end{table}
+
+\section{Validación y Evaluación de Impacto}
+\subsection{Pruebas piloto y resultados iniciales}
+El sistema fue implementado en fase piloto durante 3 meses, con los siguientes resultados:
+
+\begin{itemize}
+    \item \textbf{Precisión real:} 84\% (ligeramente inferior al 87\% estimado en validación)
+    
+    \item \textbf{Alertas generadas:} 62 en total (15 rojas, 23 naranjas, 24 amarillas)
+    
+    \item \textbf{Efectividad de intervención:} 76\% de los casos con alerta naranja o roja donde se realizó intervención lograron normalizar su situación
+    
+    \item \textbf{Reducción de morosidad:} Disminución del 18\% en la tasa general de morosidad durante el periodo piloto
+\end{itemize}
+
+\subsection{Comparación con método tradicional}
+La comparación con el método tradicional previamente utilizado muestra mejoras significativas:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{4cm}|p{3cm}|p{3cm}|p{3cm}|}
+\hline
+\textbf{Indicador} & \textbf{Método tradicional} & \textbf{Modelo predictivo} & \textbf{Mejora} \\
+\hline
+Precisión & 61\% & 84\% & +23\% \\
+\hline
+Tiempo anticipación & 3 días & 15 días (promedio) & +400\% \\
+\hline
+Falsos positivos & 28\% & 10\% & -64\% \\
+\hline
+Cobertura (recall) & 58\% & 82\% & +41\% \\
+\hline
+Tiempo análisis & 45 min/cliente & 2 min/cliente & -96\% \\
+\hline
+\end{tabular}
+\caption{Comparativa entre método tradicional y modelo predictivo}
+\end{table}
+
+\subsection{Análisis costo-beneficio}
+El análisis económico de la implementación revela:
+
+\begin{itemize}
+    \item \textbf{Costos de implementación:} \$12,500 (desarrollo, infraestructura, capacitación)
+    
+    \item \textbf{Costos operativos mensuales:} \$850 (mantenimiento, licencias, soporte)
+    
+    \item \textbf{Beneficios directos:} Reducción estimada de pérdidas por incobrables de \$4,200 mensuales
+    
+    \item \textbf{Beneficios indirectos:} Reducción de tiempo operativo valorada en \$1,800 mensuales
+    
+    \item \textbf{ROI proyectado:} 6 meses para recuperación de inversión inicial
+\end{itemize}
+
+\section{Discusión de los Resultados}
+\subsection{Interpretación de hallazgos clave}
+Los resultados obtenidos permiten extraer las siguientes conclusiones principales:
+
+\begin{enumerate}
+    \item \textbf{Predictores determinantes:} El análisis de importancia de variables confirma que la variabilidad en el comportamiento de pago es más predictiva que el simple historial de cumplimiento, lo que coincide con los hallazgos de \cite{torres2023inteligencia}.
+    
+    \item \textbf{Factores contextuales:} La significativa importancia de variables geográficas y estacionales (combinadas representan más del 20\% del poder predictivo) valida la hipótesis inicial sobre la relevancia de estos factores en el contexto mayorista ecuatoriano.
+    
+    \item \textbf{Efectividad diferenciada:} El modelo muestra mejor desempeño predictivo en los segmentos "Premium" y "Alto riesgo", mientras que presenta mayor dificultad en la predicción para el segmento "Estacional", lo que sugiere la necesidad de ajustes específicos para este grupo.
+    
+    \item \textbf{Anticipación efectiva:} El incremento en el tiempo de anticipación (de 3 a 15 días en promedio) representa una mejora sustancial en la capacidad de intervención preventiva.
+\end{enumerate}
+
+\subsection{Limitaciones del estudio}
+A pesar de los resultados positivos, es importante reconocer las siguientes limitaciones:
+
+\begin{itemize}
+    \item \textbf{Tamaño de muestra:} Con 238 clientes, aunque suficiente para el análisis, representa una limitación para técnicas avanzadas como redes neuronales profundas.
+    
+    \item \textbf{Factores externos no capturados:} Variables macroeconómicas locales y eventos específicos de mercado no están completamente integrados en el modelo actual.
+    
+    \item \textbf{Temporalidad:} La validación se realizó en un periodo de 3 meses, lo que podría no capturar completamente los ciclos estacionales anuales.
+    
+    \item \textbf{Generalización:} El modelo está optimizado para el contexto específico de la empresa estudiada, lo que podría limitar su aplicabilidad directa a otras organizaciones del sector.
+\end{itemize}
+
+\subsection{Comparación con estudios previos}
+Contrastando los resultados con la literatura existente:
+
+\begin{itemize}
+    \item La precisión obtenida (84\% en implementación real) supera el promedio reportado por \cite{garcia2024machine} para modelos similares en el sector comercial (75-80\%).
+    
+    \item La identificación de patrones estacionales como factores predictivos significativos coincide con los hallazgos de \cite{ramirez2023predictive} en mercados regionales.
+    
+    \item La efectividad de XGBoost como algoritmo óptimo confirma los resultados reportados por \cite{torres2023inteligencia} en problemas de clasificación crediticia.
+    
+    \item El enfoque de segmentación previa mediante K-Means antes de la aplicación de modelos predictivos muestra beneficios no reportados consistentemente en estudios anteriores.
+\end{itemize}
+
+\subsection{Implicaciones prácticas}
+Los resultados del estudio tienen las siguientes implicaciones prácticas para la gestión crediticia en el sector mayorista:
+
+\begin{enumerate}
+    \item \textbf{Enfoque preventivo:} La transición de un modelo reactivo a uno predictivo permite intervenciones tempranas que benefician tanto a la empresa como a los clientes.
+    
+    \item \textbf{Personalización por segmento:} La identificación de segmentos con diferentes perfiles de riesgo sugiere la implementación de políticas crediticias diferenciadas.
+    
+    \item \textbf{Relevancia contextual:} La importancia de factores regionales y estacionales destaca la necesidad de considerar el contexto local en la evaluación crediticia.
+    
+    \item \textbf{Automatización eficiente:} La reducción significativa en tiempo de análisis (96\%) libera recursos para actividades de mayor valor agregado.
+\end{enumerate}

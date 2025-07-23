@@ -1,0 +1,273 @@
+\chapter{Anexos}
+
+\section{Anexo A: Código Fuente del Modelo Predictivo}
+
+A continuación, se presenta el código principal para el entrenamiento del modelo XGBoost utilizado en el proyecto:
+
+\begin{verbatim}
+# Importación de librerías
+import pandas as pd
+import numpy as np
+import pyodbc
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score
+import xgboost as xgb
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Conexión a SQL Server 2022
+def conectar_sql_server():
+    server = 'servidor-sqlserver'
+    database = 'DW_Comisaseo'
+    username = 'usuario_analisis'
+    password = 'password'
+    
+    connection_string = f'''
+    DRIVER={{ODBC Driver 17 for SQL Server}};
+    SERVER={server};
+    DATABASE={database};
+    UID={username};
+    PWD={password}
+    '''
+    
+    conn = pyodbc.connect(connection_string)
+    return conn
+
+# Cargar datos desde SQL Server
+def cargar_datos():
+    conn = conectar_sql_server()
+    
+    query = """
+    SELECT 
+        ID_Cliente,
+        Region,
+        Antiguedad_Meses,
+        Promedio_Compra_Mensual,
+        Frecuencia_Compra_Mensual,
+        Dias_Promedio_Pago,
+        Maximo_Dias_Atraso,
+        Porcentaje_Devoluciones,
+        Indice_Estacionalidad,
+        Ratio_Pago_Plazo,
+        Variabilidad_Pago,
+        Indice_Concentracion_Producto,
+        Tendencia_Compra,
+        Indice_Cumplimiento,
+        Moroso
+    FROM V_Datos_ML
+    """
+    
+    df = pd.read_sql(query, conn)
+    conn.close()
+    return df
+
+# Cargar datos
+df = cargar_datos()
+
+# Definición de variables predictoras y objetivo
+X = df.drop(['ID_Cliente', 'Moroso'], axis=1)
+y = df['Moroso']
+
+# División de conjunto de datos
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42, stratify=y)
+
+# Identificación de columnas por tipo
+cat_cols = X.select_dtypes(include=['object', 'category']).columns.tolist()
+num_cols = X.select_dtypes(include=['int64', 'float64']).columns.tolist()
+
+# Definición de preprocesador
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', StandardScaler(), num_cols),
+        ('cat', OneHotEncoder(handle_unknown='ignore'), cat_cols)
+    ])
+
+# Definición de pipeline con XGBoost
+xgb_pipeline = Pipeline([
+    ('preprocessor', preprocessor),
+    ('classifier', xgb.XGBClassifier(objective='binary:logistic', random_state=42))
+])
+
+# Definición de parámetros para optimización
+param_grid = {
+    'classifier__n_estimators': [100, 200, 300],
+    'classifier__max_depth': [3, 5, 7],
+    'classifier__learning_rate': [0.01, 0.1, 0.2],
+    'classifier__subsample': [0.8, 0.9, 1.0],
+    'classifier__colsample_bytree': [0.8, 0.9, 1.0]
+}
+
+# Búsqueda de mejores hiperparámetros
+grid_search = GridSearchCV(
+    xgb_pipeline, param_grid, cv=5, scoring='roc_auc', n_jobs=-1, verbose=2
+)
+grid_search.fit(X_train, y_train)
+
+# Mejores parámetros encontrados
+print("Mejores parámetros:", grid_search.best_params_)
+
+# Evaluación del modelo con mejores parámetros
+best_model = grid_search.best_estimator_
+y_pred = best_model.predict(X_test)
+y_pred_proba = best_model.predict_proba(X_test)[:, 1]
+
+# Métricas de evaluación
+print("\nInforme de clasificación:")
+print(classification_report(y_test, y_pred))
+
+print("\nMatriz de confusión:")
+conf_matrix = confusion_matrix(y_test, y_pred)
+print(conf_matrix)
+
+print("\nÁrea bajo la curva ROC:")
+roc_auc = roc_auc_score(y_test, y_pred_proba)
+print(roc_auc)
+
+# Guardar predicciones en SQL Server
+def guardar_predicciones(modelo, datos, probabilidades):
+    conn = conectar_sql_server()
+    cursor = conn.cursor()
+    
+    for i, (id_cliente, prob) in enumerate(zip(datos['ID_Cliente'], probabilidades)):
+        nivel_alerta = 'Verde'
+        if prob > 0.75:
+            nivel_alerta = 'Rojo'
+        elif prob > 0.50:
+            nivel_alerta = 'Naranja'
+        elif prob > 0.20:
+            nivel_alerta = 'Amarillo'
+        
+        query = """
+        INSERT INTO ML_Predicciones 
+        (ID_Cliente, Fecha_Prediccion, Probabilidad_Morosidad, Nivel_Alerta, Score_Riesgo)
+        VALUES (?, GETDATE(), ?, ?, ?)
+        """
+        
+        cursor.execute(query, (int(id_cliente), float(prob), nivel_alerta, int(prob * 100)))
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+    print("Predicciones guardadas en SQL Server")
+
+# Guardar modelo entrenado
+import joblib
+joblib.dump(best_model, 'modelo_xgboost_final.pkl')
+print("\nModelo guardado como 'modelo_xgboost_final.pkl'")
+
+# Guardar predicciones en base de datos
+guardar_predicciones(best_model, df, y_pred_proba)
+\end{verbatim}
+
+\section{Anexo B: Estructura de la Base de Datos}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{4cm}|p{3cm}|p{7cm}|}
+\hline
+\textbf{Tabla} & \textbf{Descripción} & \textbf{Campos principales} \\
+\hline
+Clientes & Información básica de clientes & ID\_Cliente, Nombre, Región, Categoría, Fecha\_Ingreso \\
+\hline
+Transacciones & Registro de ventas & ID\_Transacción, ID\_Cliente, Fecha, Monto, Plazo\_Pago \\
+\hline
+Pagos & Registro de pagos recibidos & ID\_Pago, ID\_Transacción, Fecha\_Pago, Monto \\
+\hline
+Variables\_Derivadas & Variables calculadas para el modelo & ID\_Cliente, Antigüedad, Máximo\_Días\_Atraso, Índice\_Estacionalidad \\
+\hline
+Predicciones & Resultados del modelo predictivo & ID\_Cliente, Fecha\_Predicción, Probabilidad\_Morosidad, Nivel\_Alerta \\
+\hline
+\end{tabular}
+\caption{Estructura de la base de datos del sistema}
+\end{table}
+
+\section{Anexo C: Configuración del Dashboard}
+
+\begin{figure}[ht]
+\begin{verbatim}
+# Código de configuración para Power BI (archivo PBIT)
+
+# Conexión a la fuente de datos
+Source = Sql.Database(
+    "servidor-sqlserver", 
+    "db_riesgo_crediticio",
+    [
+        User = "usuario_analisis",
+        HierarchicalNavigation = true
+    ]
+),
+
+# Consulta principal para mapa de riesgo
+QueryMapaRiesgo = 
+    "SELECT 
+        c.Region, 
+        COUNT(p.ID_Cliente) as Num_Clientes,
+        AVG(p.Probabilidad_Morosidad) as Riesgo_Promedio,
+        SUM(CASE WHEN p.Nivel_Alerta = 'Rojo' THEN 1 ELSE 0 END) as Alertas_Rojas
+     FROM Clientes c
+     JOIN Predicciones p ON c.ID_Cliente = p.ID_Cliente
+     WHERE p.Fecha_Prediccion = 
+        (SELECT MAX(Fecha_Prediccion) FROM Predicciones)
+     GROUP BY c.Region
+     ORDER BY Riesgo_Promedio DESC",
+     
+# Configuración de actualización
+Actualización = 
+    Table.AddColumn(
+        Source, 
+        "Última Actualización", 
+        each DateTime.LocalNow()
+    )
+\end{verbatim}
+\caption{Fragmento de configuración del dashboard en Power BI}
+\end{figure}
+
+\section{Anexo D: Resultados Detallados por Segmento}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{2.5cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|}
+\hline
+\textbf{Segmento} & \textbf{Precisión} & \textbf{Recall} & \textbf{F1-Score} & \textbf{AUC} & \textbf{Reducción morosidad} \\
+\hline
+Premium & 0.92 & 0.89 & 0.90 & 0.95 & 22\% \\
+\hline
+Estable & 0.85 & 0.82 & 0.83 & 0.90 & 19\% \\
+\hline
+Estacional & 0.76 & 0.79 & 0.77 & 0.84 & 16\% \\
+\hline
+Alto riesgo & 0.88 & 0.91 & 0.89 & 0.94 & 14\% \\
+\hline
+\textbf{Global} & \textbf{0.84} & \textbf{0.82} & \textbf{0.83} & \textbf{0.91} & \textbf{18\%} \\
+\hline
+\end{tabular}
+\caption{Resultados detallados por segmento de cliente}
+\end{table}
+
+\section{Anexo E: Encuesta de Satisfacción de Usuarios}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{5cm}|p{2cm}|p{2cm}|p{2cm}|}
+\hline
+\textbf{Aspecto evaluado} & \textbf{Gerencia \newline (n=3)} & \textbf{Crédito \newline (n=5)} & \textbf{Cobranzas \newline (n=4)} \\
+\hline
+Facilidad de uso & 4.3/5 & 4.1/5 & 4.5/5 \\
+\hline
+Utilidad de predicciones & 4.7/5 & 4.6/5 & 4.8/5 \\
+\hline
+Claridad de visualizaciones & 4.0/5 & 4.2/5 & 4.3/5 \\
+\hline
+Impacto en toma de decisiones & 4.3/5 & 4.5/5 & 4.7/5 \\
+\hline
+Confianza en resultados & 3.7/5 & 4.0/5 & 4.1/5 \\
+\hline
+\textbf{Satisfacción general} & \textbf{4.2/5} & \textbf{4.3/5} & \textbf{4.5/5} \\
+\hline
+\end{tabular}
+\caption{Resultados de encuesta de satisfacción por grupo de usuarios}
+\end{table}

@@ -1,0 +1,161 @@
+\chapter{Marco Teórico}
+
+\section{Fundamentos de Machine Learning}
+\subsection{Definición y conceptos básicos}
+El machine learning o aprendizaje automático es una rama de la inteligencia artificial que se centra en el desarrollo de algoritmos capaces de aprender a partir de datos, identificar patrones y tomar decisiones con mínima intervención humana. Como señala \cite{mitchell1997machine}, "un programa de computadora aprende de la experiencia E con respecto a alguna clase de tareas T y medida de rendimiento P, si su rendimiento en tareas en T, medido por P, mejora con la experiencia E".
+
+En el contexto de la gestión crediticia, el machine learning proporciona herramientas poderosas para analizar comportamientos históricos de pago y predecir patrones futuros con una precisión superior a los métodos estadísticos tradicionales \cite{garcia2024machine}.
+
+\subsection{Tipos de aprendizaje}
+\subsubsection{Aprendizaje supervisado}
+El aprendizaje supervisado es paradigma donde el algoritmo aprende a partir de datos etiquetados, es decir, ejemplos que incluyen tanto las características de entrada como la salida deseada. En el contexto de predicción de morosidad, los modelos supervisados aprenden de registros históricos donde ya se conoce si un cliente incurrió en mora o no \cite{torres2023inteligencia}.
+
+\subsubsection{Aprendizaje no supervisado}
+A diferencia del enfoque supervisado, el aprendizaje no supervisado trabaja con datos no etiquetados, buscando descubrir estructuras, patrones o relaciones ocultas en los datos. La segmentación de clientes mediante técnicas de clustering es un ejemplo de aplicación de aprendizaje no supervisado en la gestión crediticia \cite{ramirez2023predictive}.
+
+\subsubsection{Aprendizaje por refuerzo}
+Este paradigma se basa en agentes que aprenden a tomar decisiones mediante la interacción con un entorno y la recepción de recompensas o penalizaciones. Aunque menos común en el análisis crediticio tradicional, tiene aplicaciones emergentes en estrategias dinámicas de gestión de cartera \cite{garcia2024machine}.
+
+\section{Análisis Predictivo en Gestión Crediticia}
+\subsection{Concepto de riesgo crediticio}
+El riesgo crediticio se refiere a la posibilidad de pérdida derivada del incumplimiento de las obligaciones contractuales por parte de un deudor. En el contexto mayorista, este riesgo presenta características particulares relacionadas con los volúmenes de transacción, la estacionalidad y los factores geográficos que afectan a los comercios \cite{ramirez2023predictive}.
+
+\subsection{Factores determinantes de la morosidad}
+La morosidad en carteras crediticias comerciales está influenciada por múltiples factores que pueden clasificarse en:
+
+\begin{itemize}
+    \item \textbf{Factores internos del cliente:} Capacidad financiera, historial de pagos, antigüedad como cliente, volumen de compras.
+    \item \textbf{Factores externos:} Condiciones económicas regionales, estacionalidad del negocio, competencia en el sector.
+    \item \textbf{Factores transaccionales:} Frecuencia de compras, tamaño promedio de transacción, diversidad de productos adquiridos.
+\end{itemize}
+
+Según \cite{torres2023inteligencia}, la integración de estos factores en modelos predictivos puede mejorar la precisión de las predicciones hasta en un 40\% comparado con métodos tradicionales que consideran únicamente el historial de pagos.
+
+\subsection{Indicadores clave en la evaluación crediticia}
+Los principales indicadores utilizados tradicionalmente en la evaluación del riesgo crediticio incluyen:
+
+\begin{itemize}
+    \item Ratio de morosidad (cartera vencida/cartera total)
+    \item Días promedio de atraso
+    \item Frecuencia de incumplimientos
+    \item Concentración de la cartera por cliente
+    \item Rotación de inventario del cliente (como indicador de liquidez)
+\end{itemize}
+
+\section{Técnicas de Machine Learning aplicadas al riesgo crediticio}
+\subsection{Algoritmos de clasificación}
+\subsubsection{Regresión logística}
+La regresión logística es uno de los métodos más utilizados en la evaluación de riesgo crediticio debido a su interpretabilidad y eficacia. Este algoritmo calcula la probabilidad de que un cliente pertenezca a una categoría específica (por ejemplo, moroso o no moroso) basándose en un conjunto de variables predictoras \cite{garcia2024machine}.
+
+\subsubsection{Árboles de decisión y Random Forest}
+Los árboles de decisión ofrecen una representación visual de las reglas de decisión que conducen a una clasificación. Random Forest, por su parte, construye múltiples árboles de decisión y combina sus resultados, lo que generalmente mejora la precisión y reduce el sobreajuste \cite{ramirez2023predictive}.
+
+\subsubsection{Support Vector Machines (SVM)}
+Las SVM buscan el hiperplano óptimo que separa las clases en el espacio de características. En contextos de riesgo crediticio, han demostrado alta precisión, especialmente cuando las relaciones entre variables no son lineales \cite{torres2023inteligencia}.
+
+\subsubsection{Redes neuronales}
+Las redes neuronales, especialmente las arquitecturas profundas, han ganado popularidad en el análisis crediticio debido a su capacidad para modelar relaciones complejas entre variables. Sin embargo, su interpretabilidad limitada puede ser un obstáculo en entornos donde la explicabilidad de las decisiones es crucial \cite{garcia2024machine}.
+
+\subsection{Evaluación de modelos predictivos}
+\subsubsection{Métricas de rendimiento}
+La evaluación de modelos predictivos en el contexto de riesgo crediticio requiere considerar múltiples métricas:
+
+\begin{itemize}
+    \item \textbf{Precisión general:} Porcentaje de predicciones correctas.
+    \item \textbf{Sensibilidad (recall):} Capacidad del modelo para identificar casos positivos (morosos).
+    \item \textbf{Especificidad:} Capacidad del modelo para identificar casos negativos (no morosos).
+    \item \textbf{Área bajo la curva ROC (AUC):} Medida integral del rendimiento del clasificador.
+    \item \textbf{F1-Score:} Media armónica entre precisión y recall.
+\end{itemize}
+
+\subsubsection{Validación cruzada}
+La validación cruzada es una técnica esencial para evaluar la capacidad de generalización de los modelos predictivos. Mediante la división de los datos en múltiples conjuntos de entrenamiento y prueba, permite estimar el rendimiento del modelo en datos no vistos previamente \cite{hernandez2020metodologia}.
+
+\subsubsection{Ajuste de hiperparámetros}
+El ajuste de hiperparámetros es crucial para optimizar el rendimiento de los modelos de machine learning. Técnicas como Grid Search y Random Search permiten explorar sistemáticamente diferentes configuraciones de parámetros para identificar las combinaciones que maximizan el rendimiento del modelo \cite{garcia2024machine}.
+
+\section{Metodología CRISP-DM}
+\subsection{Descripción y fases}
+CRISP-DM (Cross-Industry Standard Process for Data Mining) es una metodología ampliamente adoptada para proyectos de minería de datos y machine learning. Consta de seis fases interconectadas \cite{hernandez2020metodologia}:
+
+\begin{enumerate}
+    \item \textbf{Comprensión del negocio:} Definición de objetivos y requerimientos desde una perspectiva empresarial.
+    \item \textbf{Comprensión de los datos:} Recolección inicial de datos y familiarización con su estructura y calidad.
+    \item \textbf{Preparación de los datos:} Limpieza, transformación y selección de variables.
+    \item \textbf{Modelado:} Selección y aplicación de técnicas de modelado.
+    \item \textbf{Evaluación:} Revisión del modelo y verificación del cumplimiento de los objetivos de negocio.
+    \item \textbf{Despliegue:} Implementación del modelo en el entorno de producción.
+\end{enumerate}
+
+\subsection{Justificación de la elección metodológica}
+CRISP-DM ha sido seleccionada como metodología para este proyecto debido a su enfoque estructurado y orientado a resultados empresariales. A diferencia de otras metodologías como KDD (Knowledge Discovery in Databases) o SEMMA (Sample, Explore, Modify, Model, Assess), CRISP-DM pone un mayor énfasis en la comprensión del contexto de negocio antes de iniciar el análisis técnico \cite{hernandez2020metodologia}.
+
+Además, CRISP-DM facilita un enfoque iterativo que permite refinar continuamente el modelo basándose en los resultados obtenidos, lo que resulta especialmente valioso en el contexto dinámico del riesgo crediticio en el sector mayorista ecuatoriano.
+
+\section{Sistemas de Información para la gestión de riesgo crediticio}
+\subsection{Arquitecturas de sistemas de información}
+Las arquitecturas modernas para sistemas de gestión de riesgo crediticio generalmente siguen un modelo de capas que incluye:
+
+\begin{itemize}
+    \item \textbf{Capa de datos:} Almacenamiento y gestión de datos transaccionales e históricos.
+    \item \textbf{Capa de procesamiento:} Implementación de algoritmos de análisis y predicción.
+    \item \textbf{Capa de presentación:} Interfaces para la visualización de resultados y toma de decisiones.
+\end{itemize}
+
+En el contexto específico del sector mayorista, estas arquitecturas deben adaptarse para manejar volúmenes variables de transacciones y considerar factores como la estacionalidad y la distribución geográfica \cite{ramirez2023predictive}.
+
+\subsection{Integración de modelos predictivos en sistemas existentes}
+La integración exitosa de modelos predictivos en sistemas de información existentes requiere considerar aspectos como:
+
+\begin{itemize}
+    \item \textbf{Interoperabilidad:} Capacidad del modelo para interactuar con los sistemas de gestión transaccional existentes.
+    \item \textbf{Escalabilidad:} Adaptación a volúmenes crecientes de datos y usuarios.
+    \item \textbf{Mantenibilidad:} Facilidad para actualizar y refinar el modelo con nuevos datos.
+    \item \textbf{Seguridad:} Protección de datos sensibles de clientes e información financiera.
+\end{itemize}
+
+\subsection{Visualización de datos y dashboards analíticos}
+Los dashboards analíticos constituyen una interfaz crucial entre los modelos predictivos y los usuarios finales. Según \cite{torres2023inteligencia}, las características esenciales de un dashboard efectivo para la gestión de riesgo crediticio incluyen:
+
+\begin{itemize}
+    \item Representación visual intuitiva de indicadores de riesgo
+    \item Capacidad de filtrado por variables críticas (geografía, segmento, etc.)
+    \item Alertas automáticas basadas en umbrales predefinidos
+    \item Visualización de tendencias temporales y patrones estacionales
+    \item Acceso a diferentes niveles de detalle (drill-down)
+\end{itemize}
+
+\section{El sector mayorista en Ecuador: contexto y particularidades}
+\subsection{Caracterización del sector mayorista de productos de juguetería, hogar, aseo y cocina}
+El sector mayorista de productos de juguetería, hogar, aseo y cocina en Ecuador presenta características específicas que influyen en la dinámica crediticia:
+
+\begin{itemize}
+    \item Alta estacionalidad, con picos de demanda en periodos festivos
+    \item Sensibilidad a fluctuaciones económicas regionales
+    \item Cadenas de suministro complejas con componentes de importación
+    \item Márgenes variables según categoría de producto
+\end{itemize}
+
+\subsection{Dinámica crediticia en el sector mayorista ecuatoriano}
+Las prácticas crediticias en el sector mayorista ecuatoriano se caracterizan por:
+
+\begin{itemize}
+    \item Plazos de pago que típicamente oscilan entre 30 y 90 días
+    \item Variaciones regionales significativas en comportamiento de pago
+    \item Importancia de las relaciones personales en la evaluación crediticia informal
+    \item Alta competencia que presiona a los proveedores a ofrecer condiciones crediticias favorables
+\end{itemize}
+
+Estas particularidades deben ser consideradas en el diseño de modelos predictivos adaptados a la realidad local, ya que difieren de patrones globales generalizados \cite{ramirez2023predictive}.
+
+\subsection{Desafíos específicos en la gestión de riesgo crediticio mayorista}
+La gestión de riesgo crediticio en el sector mayorista ecuatoriano enfrenta desafíos particulares:
+
+\begin{itemize}
+    \item Limitada formalización financiera de muchos comercios minoristas
+    \item Escasa disponibilidad de información crediticia centralizada
+    \item Variabilidad regional en prácticas comerciales y cumplimiento
+    \item Impacto de eventos económicos locales en la capacidad de pago
+\end{itemize}
+
+Estos desafíos representan tanto obstáculos como oportunidades para la implementación de modelos predictivos avanzados que puedan capturar y adaptarse a estas particularidades \cite{torres2023inteligencia}.

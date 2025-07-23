@@ -1,0 +1,369 @@
+\chapter{Metodología}
+
+\section{Diseño de la Investigación}
+\subsection{Tipo y alcance de la investigación}
+La presente investigación se enmarca en un alcance exploratorio-correlacional-explicativo. Como señala \cite{hernandez2020metodologia}, este enfoque multicapa permite:
+
+\begin{itemize}
+    \item \textbf{Fase exploratoria:} Identificar variables y patrones iniciales en los datos históricos de comportamiento crediticio, examinando factores que podrían influir en la morosidad.
+    \item \textbf{Fase correlacional:} Establecer relaciones estadísticas entre las variables identificadas y el comportamiento de pago, cuantificando su influencia relativa.
+    \item \textbf{Fase explicativa:} Desarrollar modelos predictivos que expliquen y anticipen el riesgo de morosidad, proporcionando una base para intervenciones preventivas.
+\end{itemize}
+
+Este enfoque resulta particularmente adecuado para abordar la complejidad del comportamiento crediticio en el sector mayorista, donde intervienen múltiples variables interrelacionadas.
+
+\subsection{Enfoque metodológico}
+La investigación adopta un enfoque predominantemente cuantitativo, basado en el análisis de datos históricos de comportamiento de pago y variables asociadas. Este enfoque se complementa con elementos cualitativos para la interpretación contextual de los resultados, considerando factores del sector mayorista ecuatoriano que podrían no estar completamente capturados en los datos numéricos.
+
+\section{Aplicación de la Metodología CRISP-DM}
+\subsection{Fase 1: Comprensión del negocio}
+\subsubsection{Contexto organizacional}
+La empresa objeto de estudio opera en el sector mayorista de productos de juguetería, hogar, aseo y cocina en Ecuador. Con una trayectoria de más de 15 años en el mercado, gestiona una cartera crediticia que supera el millón de dólares, distribuida entre 238 clientes activos a nivel nacional.
+
+\subsubsection{Objetivos de negocio}
+Los objetivos de negocio que motivan esta investigación incluyen:
+
+\begin{itemize}
+    \item Reducir la tasa de morosidad en al menos un 20\% respecto a los niveles actuales
+    \item Optimizar la asignación de cupos de crédito basada en análisis predictivo del comportamiento
+    \item Implementar un sistema de alertas tempranas que permita intervenciones preventivas
+    \item Automatizar el proceso de evaluación de riesgo para nuevos clientes y ampliaciones de cupo
+\end{itemize}
+
+\subsubsection{Evaluación de la situación actual}
+Actualmente, la empresa utiliza métodos tradicionales para la evaluación crediticia, basados principalmente en:
+
+\begin{itemize}
+    \item Historial de pagos
+    \item Referencias comerciales
+    \item Tiempo como cliente
+    \item Volumen promedio de compras
+\end{itemize}
+
+Este enfoque presenta limitaciones significativas:
+
+\begin{itemize}
+    \item Baja capacidad predictiva (precisión estimada del 60\%)
+    \item Evaluación reactiva más que preventiva
+    \item Escasa consideración de factores externos (estacionalidad, geografía)
+    \item Proceso manual con alta dependencia del criterio individual
+\end{itemize}
+
+\subsubsection{Determinación de objetivos de minería de datos}
+Con base en la comprensión del negocio, se establecen los siguientes objetivos específicos para el proceso de minería de datos:
+
+\begin{itemize}
+    \item Identificar los factores con mayor poder predictivo para anticipar riesgo de morosidad
+    \item Desarrollar un modelo predictivo con precisión superior al 80\%
+    \item Segmentar la cartera de clientes según perfiles de riesgo
+    \item Generar indicadores tempranos de alerta para cada segmento
+\end{itemize}
+
+\subsection{Fase 2: Comprensión de los datos}
+\subsubsection{Descripción de las fuentes de datos}
+Los datos para esta investigación provienen de múltiples fuentes internas de la empresa:
+
+\begin{itemize}
+    \item \textbf{Sistema ERP:} Datos transaccionales de ventas, devoluciones y pagos desde 2017
+    \item \textbf{CRM:} Información de clientes, incluyendo datos demográficos y geográficos
+    \item \textbf{Sistema de cobranzas:} Registros históricos de gestión de cobro y comportamiento de pago
+    \item \textbf{Hojas de cálculo complementarias:} Registros manuales de seguimiento de cartera
+\end{itemize}
+
+\subsubsection{Exploración inicial de datos}
+La exploración inicial revela un conjunto de datos con las siguientes características:
+
+\begin{itemize}
+    \item \textbf{Volumen:} Aproximadamente 150,000 registros transaccionales
+    \item \textbf{Período:} Datos históricos desde enero 2017 hasta diciembre 2024
+    \item \textbf{Granularidad:} Nivel transaccional (facturas, pagos, notas de crédito)
+    \item \textbf{Dimensiones geográficas:} Distribución en 12 provincias del Ecuador
+    \item \textbf{Categorías de productos:} 4 líneas principales (juguetería, hogar, aseo, cocina)
+\end{itemize}
+
+\subsubsection{Verificación de calidad de datos}
+La evaluación preliminar de calidad de datos identifica los siguientes aspectos:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{4cm}|p{3cm}|p{7cm}|}
+\hline
+\textbf{Aspecto} & \textbf{Estado} & \textbf{Observaciones} \\
+\hline
+Completitud & Parcial & Datos faltantes en aproximadamente 12\% de los registros, principalmente en campos descriptivos y categorización de productos \\
+\hline
+Consistencia & Moderada & Inconsistencias en la codificación de regiones geográficas y en la clasificación de motivos de retraso \\
+\hline
+Precisión & Alta en datos financieros & Los montos y fechas de transacciones muestran alta precisión, mientras que los datos cualitativos presentan mayor variabilidad \\
+\hline
+Actualización & Diaria para transacciones & Los sistemas transaccionales se actualizan diariamente, mientras que la información complementaria tiene actualizaciones variables \\
+\hline
+\end{tabular}
+\caption{Evaluación de calidad de datos}
+\end{table}
+
+\subsection{Fase 3: Preparación de los datos}
+\subsubsection{Selección de datos}
+Con base en la exploración inicial y los objetivos establecidos, se seleccionan las siguientes variables para el análisis:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{4cm}|p{3cm}|p{7cm}|}
+\hline
+\textbf{Variable} & \textbf{Tipo} & \textbf{Descripción} \\
+\hline
+ID\_Cliente & Categórica & Identificador único de cliente \\
+\hline
+Región & Categórica & Ubicación geográfica (provincia) \\
+\hline
+Antigüedad & Numérica & Tiempo como cliente (meses) \\
+\hline
+Promedio\_Compra & Numérica & Monto promedio de compra mensual \\
+\hline
+Frecuencia\_Compra & Numérica & Número promedio de compras por mes \\
+\hline
+Días\_Promedio\_Pago & Numérica & Tiempo promedio para completar pagos \\
+\hline
+Máximo\_Días\_Atraso & Numérica & Máximo retraso histórico en días \\
+\hline
+Porcentaje\_Devoluciones & Numérica & Porcentaje de mercadería devuelta \\
+\hline
+Categoría\_Principal & Categórica & Línea de producto predominante \\
+\hline
+Índice\_Estacionalidad & Numérica & Variación estacional en compras \\
+\hline
+Historial\_Mora & Categórica & Clasificación histórica de comportamiento \\
+\hline
+\end{tabular}
+\caption{Variables seleccionadas para el análisis}
+\end{table}
+
+\subsubsection{Limpieza de datos}
+El proceso de limpieza incluye las siguientes acciones:
+
+\begin{itemize}
+    \item \textbf{Tratamiento de valores faltantes:} Imputación mediante técnicas estadísticas para variables numéricas y moda para variables categóricas
+    \item \textbf{Identificación y manejo de valores atípicos:} Aplicación del método IQR (Rango Intercuartílico) para detectar outliers y su normalización
+    \item \textbf{Estandarización de codificaciones:} Unificación de categorías geográficas y de productos
+    \item \textbf{Validación de coherencia temporal:} Corrección de inconsistencias en secuencias temporales de transacciones
+\end{itemize}
+
+\subsubsection{Construcción y transformación de variables}
+A partir de los datos disponibles, se derivan las siguientes variables adicionales:
+
+\begin{itemize}
+    \item \textbf{Ratio\_Pago\_Plazo:} Relación entre días reales de pago y plazo acordado
+    \item \textbf{Variabilidad\_Pago:} Desviación estándar en comportamiento de pago
+    \item \textbf{Índice\_Concentración\_Producto:} Diversificación de compras entre categorías
+    \item \textbf{Tendencia\_Compra:} Pendiente de evolución de montos de compra (últimos 6 meses)
+    \item \textbf{Índice\_Cumplimiento:} Ratio ponderado de cumplimiento de compromisos de pago
+\end{itemize}
+
+Las transformaciones aplicadas incluyen:
+
+\begin{itemize}
+    \item Normalización Min-Max para variables numéricas
+    \item Codificación One-Hot para variables categóricas
+    \item Transformación logarítmica para variables con distribución sesgada
+    \item Discretización de variables continuas para análisis específicos
+\end{itemize}
+
+\subsubsection{Integración de datos}
+La integración de las diversas fuentes se realiza mediante un proceso ETL (Extracción, Transformación, Carga) que combina:
+
+\begin{itemize}
+    \item Exportación programada de datos transaccionales
+    \item Carga incremental de nuevos registros
+    \item Consolidación en una estructura unificada de datos
+    \item Verificación de integridad referencial entre fuentes
+\end{itemize}
+
+El resultado es un conjunto de datos integrado con 238 registros (uno por cliente) y 32 variables (originales y derivadas).
+
+\subsection{Fase 4: Modelado}
+\subsubsection{Selección de técnicas de modelado}
+Con base en los objetivos del proyecto y la naturaleza de los datos, se seleccionan las siguientes técnicas de modelado:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{3.5cm}|p{3.5cm}|p{7cm}|}
+\hline
+\textbf{Técnica} & \textbf{Propósito} & \textbf{Justificación} \\
+\hline
+Regresión Logística & Modelo base de clasificación & Ofrece interpretabilidad y establece una línea base de rendimiento \\
+\hline
+Random Forest & Clasificación avanzada & Alta precisión y capacidad para manejar variables correlacionadas \\
+\hline
+XGBoost & Clasificación optimizada & Rendimiento superior en problemas de clasificación binaria \\
+\hline
+K-Means & Segmentación de clientes & Identificación de grupos naturales en la cartera según perfil de riesgo \\
+\hline
+Redes Neuronales & Exploración de relaciones complejas & Capacidad para capturar interacciones no lineales entre variables \\
+\hline
+\end{tabular}
+\caption{Técnicas de modelado seleccionadas}
+\end{table}
+
+\subsubsection{Diseño de pruebas}
+El enfoque de validación incluye:
+
+\begin{itemize}
+    \item \textbf{División de datos:} 70\% entrenamiento, 30\% prueba
+    \item \textbf{Validación cruzada:} K-fold (k=5) para estimación robusta del rendimiento
+    \item \textbf{Técnicas de remuestreo:} SMOTE para abordar el desbalance de clases
+    \item \textbf{Evaluación secuencial:} Entrenamiento progresivo con datos cronológicos para simular implementación real
+\end{itemize}
+
+\subsubsection{Construcción de modelos}
+Para cada técnica seleccionada, se implementan los siguientes pasos:
+
+\begin{enumerate}
+    \item Inicialización con configuración base
+    \item Entrenamiento inicial con conjunto de entrenamiento
+    \item Ajuste de hiperparámetros mediante Grid Search o Bayesian Optimization
+    \item Reentrenamiento con configuración optimizada
+    \item Evaluación con métricas múltiples
+\end{enumerate}
+
+\subsubsection{Evaluación y comparación de modelos}
+La evaluación de los modelos se realiza utilizando las siguientes métricas:
+
+\begin{itemize}
+    \item Exactitud (Accuracy)
+    \item Precisión (Precision)
+    \item Sensibilidad (Recall)
+    \item F1-Score
+    \item Área bajo la curva ROC (AUC)
+    \item Pérdida logarítmica (Log Loss)
+    \item Tiempo de entrenamiento y predicción
+\end{itemize}
+
+Adicionalmente, se evalúa la relevancia de las variables (feature importance) para cada modelo, lo que proporciona insights sobre los factores más determinantes en la predicción de morosidad.
+
+\subsection{Fase 5: Evaluación}
+\subsubsection{Evaluación de resultados respecto a objetivos de negocio}
+Los resultados obtenidos se evalúan en relación con los objetivos de negocio establecidos:
+
+\begin{itemize}
+    \item \textbf{Reducción de morosidad:} Estimación de impacto potencial basada en la capacidad predictiva
+    \item \textbf{Optimización de asignación de cupo:} Evaluación de recomendaciones generadas por el modelo
+    \item \textbf{Efectividad de alertas tempranas:} Tiempo de anticipación logrado por las predicciones
+    \item \textbf{Automatización del proceso:} Viabilidad técnica y operativa de la implementación
+\end{itemize}
+
+\subsubsection{Revisión del proceso}
+Se realiza una revisión integral del proceso seguido, identificando:
+
+\begin{itemize}
+    \item Lecciones aprendidas en cada fase
+    \item Desafíos metodológicos enfrentados
+    \item Adaptaciones realizadas a la metodología estándar
+    \item Áreas de mejora para futuras iteraciones
+\end{itemize}
+
+\subsection{Fase 6: Implementación}
+\subsubsection{Plan de implementación}
+La implementación del modelo seleccionado contempla las siguientes etapas:
+
+\begin{enumerate}
+    \item \textbf{Desarrollo de API:} Creación de interfaces programáticas para integración con sistemas existentes
+    \item \textbf{Diseño de dashboard:} Desarrollo de interfaz de visualización para usuarios finales
+    \item \textbf{Automatización de actualización:} Implementación de procesos de reentrenamiento periódico
+    \item \textbf{Documentación técnica:} Elaboración de manuales y guías de referencia
+    \item \textbf{Capacitación:} Formación a usuarios en interpretación y uso de resultados
+\end{enumerate}
+
+\subsubsection{Monitoreo y mantenimiento}
+El plan de monitoreo y mantenimiento incluye:
+
+\begin{itemize}
+    \item Seguimiento continuo del rendimiento del modelo
+    \item Alertas automáticas ante degradación de precisión
+    \item Actualización trimestral con nuevos datos de comportamiento
+    \item Revisión semestral de variables y parámetros
+    \item Procedimientos de backup y recuperación
+\end{itemize}
+
+\section{Herramientas y Tecnologías}
+\subsection{Software utilizado}
+Para la implementación del proyecto se utilizan las siguientes herramientas:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{3cm}|p{3cm}|p{8cm}|}
+\hline
+\textbf{Herramienta} & \textbf{Versión} & \textbf{Propósito} \\
+\hline
+Python & 3.9 & Lenguaje principal para análisis de datos y modelado \\
+\hline
+Pandas & 1.4.2 & Manipulación y análisis de datos estructurados \\
+\hline
+Scikit-learn & 1.0.2 & Implementación de algoritmos de machine learning \\
+\hline
+XGBoost & 1.5.1 & Modelo avanzado de boosting para clasificación \\
+\hline
+TensorFlow & 2.9.0 & Implementación de redes neuronales \\
+\hline
+SQL Server & 2022 & Almacenamiento de datos integrados \\
+\hline
+Power BI & 2024 & Desarrollo de dashboards y visualizaciones \\
+\hline
+Git & 2.35.1 & Control de versiones de código y documentación \\
+\hline
+\end{tabular}
+\caption{Software utilizado en el proyecto}
+\end{table}
+
+\subsection{Infraestructura tecnológica}
+La arquitectura tecnológica implementada comprende:
+
+\begin{itemize}
+    \item \textbf{Servidores:} Entorno virtualizado con sistema operativo Linux
+    \item \textbf{Almacenamiento:} Sistema de bases de datos relacional con respaldos incrementales
+    \item \textbf{Procesamiento:} Implementación optimizada para ejecución eficiente de algoritmos
+    \item \textbf{Comunicación:} Interfaces API REST para integración con sistemas empresariales
+    \item \textbf{Seguridad:} Encriptación de datos sensibles y control de acceso basado en roles
+\end{itemize}
+
+\section{Consideraciones Éticas y de Seguridad}
+\subsection{Manejo de datos sensibles}
+El proyecto implementa las siguientes medidas para el manejo ético de datos:
+
+\begin{itemize}
+    \item Anonimización de identificadores personales directos
+    \item Agregación de datos para análisis que no requieren granularidad individual
+    \item Almacenamiento encriptado de información sensible
+    \item Política de acceso restrictivo basada en necesidad de conocimiento
+    \item Documentación de flujos de datos y responsables de procesamiento
+\end{itemize}
+
+\subsection{Sesgos potenciales y estrategias de mitigación}
+Se identifican los siguientes sesgos potenciales y sus correspondientes estrategias de mitigación:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{4cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Tipo de sesgo} & \textbf{Manifestación potencial} & \textbf{Estrategia de mitigación} \\
+\hline
+Sesgo geográfico & Predicciones más precisas para regiones con mayor representación en los datos & Estratificación y ponderación de muestras por región \\
+\hline
+Sesgo temporal & Menor precisión en periodos atípicos o estacionales & Inclusión explícita de variables temporales y estacionales \\
+\hline
+Sesgo de selección & Sobrerrepresentación de clientes con mayor historial & Técnicas de balanceo para nuevos clientes vs. antiguos \\
+\hline
+Sesgo de confirmación & Tendencia a mantener patrones de evaluación preexistentes & Validación cruzada y evaluación por múltiples criterios \\
+\hline
+\end{tabular}
+\caption{Sesgos potenciales y estrategias de mitigación}
+\end{table}
+
+\subsection{Cumplimiento normativo}
+El desarrollo e implementación del modelo predictivo considera el cumplimiento de:
+
+\begin{itemize}
+    \item Ley Orgánica de Protección de Datos Personales del Ecuador
+    \item Normativas de la Superintendencia de Compañías sobre reportes de cartera
+    \item Políticas internas de confidencialidad y manejo de información
+    \item Estándares internacionales de seguridad de información (ISO 27001)
+\end{itemize}
