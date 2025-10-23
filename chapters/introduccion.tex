@@ -15,7 +15,7 @@ Los métodos convencionales de evaluación crediticia utilizados por la empresa 
     \item Procesos manuales que consumen tiempo significativo del personal (promedio de 45 minutos por evaluación de cliente)
 \end{itemize}
 
-La disponibilidad de datos históricos desde 2017 proporciona un conjunto robusto de información para el entrenamiento de modelos de machine learning que puedan identificar patrones complejos en el comportamiento de pago. Como señala \cite{torres2023inteligencia}, la integración de técnicas de inteligencia artificial en sistemas de información crediticia puede mejorar la precisión de las predicciones de riesgo hasta en un 40\% comparado con métodos tradicionales.
+La disponibilidad de datos históricos desde 2017 proporciona un conjunto robusto de información para el entrenamiento de modelos de machine learning que puedan identificar patrones complejos en el comportamiento de pago. Estudios recientes demuestran que la integración de técnicas de inteligencia artificial en sistemas de información crediticia puede mejorar significativamente la precisión de las predicciones de riesgo comparado con métodos tradicionales \citep{kim2022credit, lessmann2015benchmarking}.
 
 Este estudio aborda la necesidad de desarrollar un modelo predictivo adaptado específicamente a las particularidades del sector mayorista ecuatoriano, que permita identificar con anticipación el riesgo de morosidad y facilite la implementación de estrategias preventivas efectivas.
 
@@ -91,7 +91,7 @@ El sistema desarrollado permite a la empresa optimizar su gestión de riesgo cre
     \item Implementación de estrategias preventivas personalizadas, basadas en perfiles de riesgo específicos
 \end{itemize}
 
-La solución desarrollada tiene un impacto económico directo cuantificable, estimado en una reducción de incobrables superior a $50,000 \text{ anuales y una optimización operativa}$ valorada en aproximadamente $20,000 \text{ anuales en tiempo del personal}$.
+La solución desarrollada tiene un impacto económico directo cuantificable, estimado en una reducción de incobrables superior a \$50,000 anuales y una optimización operativa valorada en aproximadamente \$20,000 anuales en tiempo del personal.
 
 \section{Alcance del Estudio}
 
@@ -102,6 +102,26 @@ La investigación comprende el análisis de datos históricos de comportamiento 
 La validación del modelo se realiza mediante un período piloto de tres meses, durante el cual se evalúa su efectividad en términos de precisión, tiempo de anticipación y reducción de la tasa de morosidad, en comparación con los métodos tradicionales previamente utilizados por la empresa.
 
 El alcance del proyecto incluye el desarrollo completo del ciclo de vida del modelo predictivo, desde la preparación y análisis de datos hasta la implementación de un sistema de información con dashboard interactivo y alertas tempranas, así como la documentación de resultados y recomendaciones para su mantenimiento y evolución futura.
+
+\section{Consideraciones Éticas y de Confidencialidad}
+
+Dado que este proyecto utiliza datos reales de una empresa comercial ecuatoriana, se han implementado rigurosos protocolos para garantizar la confidencialidad y el manejo ético de la información. Todos los datos presentados en este documento han sido anonimizados, eliminando cualquier información que pudiera identificar directamente a la empresa, sus clientes o empleados específicos.
+
+El tratamiento de los datos personales y comerciales se realizó cumpliendo con los siguientes principios:
+
+\begin{itemize}
+    \item \textbf{Anonimización:} Todos los identificadores personales (nombres, cédulas, direcciones específicas) fueron reemplazados por códigos alfanuméricos o eliminados de los conjuntos de datos de análisis.
+    
+    \item \textbf{Propósito limitado:} Los datos fueron utilizados exclusivamente para los fines académicos y de investigación descritos en este proyecto, sin compartirlos con terceros ni utilizarlos para otros propósitos comerciales.
+    
+    \item \textbf{Minimización de datos:} Solo se procesaron los datos estrictamente necesarios para el desarrollo del modelo predictivo y la validación de resultados.
+    
+    \item \textbf{Seguridad de la información:} El almacenamiento y procesamiento de datos se realizó en infraestructura controlada con medidas de seguridad apropiadas, incluyendo cifrado y controles de acceso.
+    
+    \item \textbf{Consentimiento informado:} La empresa proporcionó autorización explícita para el uso de sus datos históricos con fines académicos, bajo acuerdo de confidencialidad.
+\end{itemize}
+
+Es importante destacar que el modelo predictivo desarrollado no utiliza ni considera variables protegidas que puedan generar discriminación (raza, género, religión, orientación política), enfocándose exclusivamente en indicadores objetivos de comportamiento crediticio y características comerciales relevantes para la evaluación de riesgo.
 
 \section{Estructura del Documento}
 

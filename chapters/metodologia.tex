@@ -353,6 +353,64 @@ La evaluación de los modelos se realiza utilizando las siguientes métricas:
 \end{itemize}
 
 Adicionalmente, se evalúa la relevancia de las variables (feature importance) para cada modelo, lo que proporciona insights sobre los factores más determinantes en la predicción de morosidad.
+% ============================================================================
+% SECCIÓN ADICIONAL PARA METODOLOGÍA.TEX
+% Agregar después de la sección de CRISP-DM - Fase 4: Modelado
+% ============================================================================
+
+\subsection{Implementación Técnica del Modelo XGBoost}
+
+La implementación práctica del modelo predictivo se realizó mediante un conjunto integrado de scripts Python que conectan directamente con el Data Warehouse construido en SQL Server, garantizando una arquitectura robusta y escalable para la predicción automatizada de morosidad.
+
+\subsubsection{Arquitectura de la Solución}
+
+La arquitectura implementada sigue un patrón de capas claramente definidas que separa las responsabilidades y facilita el mantenimiento del sistema. En la capa de persistencia, SQL Server 2022 aloja tanto el Data Warehouse operacional como el esquema especializado de machine learning, que incluye las tablas DatasetMorosidad para el conjunto de datos de entrenamiento, Predicciones para almacenar los resultados del modelo, y ModelosRegistro para mantener un histórico de versiones y métricas de cada modelo entrenado.
+
+La capa de procesamiento analítico, implementada en Python 3.8, utiliza bibliotecas especializadas para cada aspecto del pipeline de machine learning. La biblioteca pandas gestiona la manipulación eficiente de datos tabulares, mientras que numpy proporciona operaciones matriciales de alto rendimiento. Para la conectividad con SQL Server, se emplea pyodbc con el driver ODBC 17, garantizando compatibilidad y rendimiento óptimo en las operaciones de lectura y escritura masiva de datos.
+
+El componente de machine learning propiamente dicho se construye sobre scikit-learn para la preparación de datos, validación cruzada y evaluación de modelos, mientras que la biblioteca xgboost proporciona la implementación optimizada del algoritmo de gradient boosting. Las bibliotecas matplotlib y seaborn se utilizan para la generación de visualizaciones analíticas de los resultados del modelo.
+
+\subsubsection{Proceso de Entrenamiento del Modelo}
+
+El script principal de entrenamiento implementa un pipeline completo que abarca desde la extracción de datos hasta la persistencia del modelo entrenado. El proceso inicia con la conexión a SQL Server mediante autenticación Windows, estableciendo una sesión robusta que maneja automáticamente la reconexión en caso de interrupciones temporales.
+
+La extracción del dataset se realiza mediante una consulta SQL optimizada que recupera todos los registros de la tabla DatasetMorosidad, la cual contiene aproximadamente quinientos sesenta y ocho observaciones con treinta y dos variables predictoras. Estas variables incluyen métricas de comportamiento crediticio como días promedio de atraso histórico, desviación estándar de los días de atraso, y ratio de facturas vencidas, complementadas con variables contextuales como región geográfica codificada, mes de análisis para capturar estacionalidad, y antigüedad del cliente en días.
+
+Una vez cargado el dataset en memoria como un DataFrame de pandas, se procede con la división estratificada en tres conjuntos independientes. El conjunto de entrenamiento comprende el sesenta por ciento de los datos y se utiliza para el ajuste inicial de los parámetros del modelo. El conjunto de validación, con veinte por ciento de las observaciones, sirve para la optimización de hiperparámetros mediante validación cruzada. Finalmente, el conjunto de prueba, con el veinte por ciento restante de los datos, se reserva exclusivamente para la evaluación final del modelo, garantizando una estimación imparcial del rendimiento en datos completamente no vistos durante el entrenamiento.
+
+La normalización de características numéricas se implementa mediante StandardScaler de scikit-learn, que transforma cada variable a media cero y desviación estándar uno. Esta normalización es crucial para algoritmos basados en gradientes como XGBoost, ya que asegura que todas las variables contribuyan equitativamente al modelo independientemente de sus escalas originales. El objeto scaler se persiste junto con el modelo para garantizar que los datos de predicción futura reciban exactamente la misma transformación.
+
+\subsubsection{Optimización de Hiperparámetros}
+
+La optimización de hiperparámetros se realiza mediante GridSearchCV, que implementa una búsqueda exhaustiva en el espacio de parámetros definido. La grilla de búsqueda incluye combinaciones de learning rate entre cero punto cero uno y cero punto tres, profundidad máxima de árboles entre tres y siete niveles, número de estimadores entre cincuenta y doscientos, y el parámetro de subsample entre cero punto ocho y uno punto cero.
+
+Para cada combinación de hiperparámetros, se realiza validación cruzada estratificada con cinco pliegues, garantizando que la distribución de la clase positiva (clientes morosos) se mantenga equilibrada en cada pliegue. El criterio de optimización seleccionado es el F1-score, que proporciona un balance apropiado entre precisión y recall, particularmente importante en problemas de clasificación desbalanceada como la predicción de morosidad donde los casos positivos son minoritarios.
+
+El proceso de búsqueda exhaustiva evalúa aproximadamente cuarenta y ocho combinaciones de parámetros, requiriendo entre una y tres horas de tiempo computacional dependiendo de las características del hardware disponible. Durante la ejecución, el sistema muestra mensajes informativos sobre el progreso de la búsqueda y las mejores configuraciones encontradas hasta el momento.
+
+\subsubsection{Evaluación y Métricas del Modelo}
+
+Una vez identificada la configuración óptima de hiperparámetros, se reentrena el modelo sobre el conjunto completo de entrenamiento más validación, y se evalúa su rendimiento sobre el conjunto de prueba reservado. Las métricas de evaluación incluyen accuracy para medir la proporción general de predicciones correctas, precision para cuantificar la confiabilidad de las predicciones positivas (clientes identificados como morosos que efectivamente lo son), recall para medir la capacidad del modelo de identificar todos los casos positivos reales, F1-score como media armónica entre precision y recall, y área bajo la curva ROC (AUC-ROC) como medida integral de discriminación entre clases.
+
+La matriz de confusión generada proporciona un desglose detallado de verdaderos positivos, falsos positivos, verdaderos negativos y falsos negativos, permitiendo analizar los tipos específicos de errores que comete el modelo. Esta información es crucial para determinar si el modelo tiende a ser conservador (clasificando pocos casos como morosos, minimizando falsos positivos) o agresivo (clasificando muchos casos como morosos, minimizando falsos negativos).
+
+El análisis de importancia de variables se realiza mediante el método de ganancia acumulada de información, que cuantifica la contribución de cada variable al poder predictivo del modelo. Este análisis revela que las variables de comportamiento histórico de pago (días promedio de atraso, desviación estándar de atraso, ratio de facturas vencidas) tienen la mayor importancia predictiva, seguidas por variables contextuales como región geográfica y estacionalidad.
+
+\subsubsection{Persistencia y Versionado del Modelo}
+
+El modelo entrenado se persiste mediante la biblioteca joblib, que utiliza un protocolo de serialización optimizado para objetos Python complejos. El archivo resultante contiene no solo el modelo XGBoost entrenado, sino también el objeto StandardScaler con los parámetros de normalización, los encoders para variables categóricas, y metadatos completos incluyendo las métricas de rendimiento, los hiperparámetros seleccionados, la fecha y hora de entrenamiento, y la versión de las bibliotecas utilizadas.
+
+Simultáneamente, se registra una entrada en la tabla ModelosRegistro de SQL Server, creando un histórico auditable de todas las versiones del modelo entrenadas. Este registro incluye un identificador único del modelo, timestamp de creación, métricas de rendimiento en formato JSON, y la ruta al archivo del modelo persistido. Esta práctica de versionado es esencial en entornos productivos, permitiendo rastrear la evolución del rendimiento del modelo a lo largo del tiempo y facilitar rollbacks si una nueva versión presenta degradación en el rendimiento.
+
+\subsubsection{Generación de Predicciones}
+
+El script de predicción implementa un pipeline complementario que carga el modelo persistido más reciente y genera predicciones para el conjunto actual de clientes activos. El proceso inicia cargando el modelo desde disco, verificando la integridad del archivo y la compatibilidad de versiones de las bibliotecas.
+
+Los datos para predicción se extraen de una vista SQL que integra información del Data Warehouse, calculando en tiempo real las mismas características utilizadas durante el entrenamiento. Es crítico que las definiciones de estas características sean idénticas a las del entrenamiento para evitar discrepancias que degradarían el rendimiento predictivo (fenómeno conocido como training-serving skew).
+
+Cada predicción incluye no solo la clasificación binaria (moroso o no moroso), sino también la probabilidad estimada de morosidad, lo que permite establecer umbrales de decisión flexibles según el apetito de riesgo de la organización. Los resultados se clasifican en niveles de riesgo (bajo, medio, alto, muy alto) basados en percentiles de probabilidad, y se asignan acciones recomendadas específicas para cada nivel (desde monitoreo estándar hasta intervención inmediata de cobranza).
+
+Las predicciones se escriben directamente a la tabla Predicciones en SQL Server, incluyendo timestamp de generación, identificador del modelo utilizado, probabilidad de morosidad, nivel de riesgo clasificado, y acción recomendada. Esta tabla se convierte en la fuente de datos principal para el dashboard de Power BI, cerrando el ciclo desde los datos transaccionales hasta la visualización de alertas tempranas accionables.
 
 \subsection{Fase 5: Evaluación}
 \subsubsection{Evaluación de resultados respecto a objetivos de negocio}
