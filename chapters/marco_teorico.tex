@@ -74,6 +74,40 @@ La validación cruzada es una técnica esencial para evaluar la capacidad de gen
 \subsubsection{Ajuste de hiperparámetros}
 El ajuste de hiperparámetros es crucial para optimizar el rendimiento de los modelos de machine learning. Técnicas como Grid Search y Random Search permiten explorar sistemáticamente diferentes configuraciones de parámetros para identificar las combinaciones que maximizan el rendimiento del modelo \cite{garcia2024machine}.
 
+\subsection{XGBoost: Fundamentos y Aplicaciones}
+
+\subsubsection{Fundamentos matemáticos de XGBoost}
+XGBoost (eXtreme Gradient Boosting) representa una implementación optimizada del algoritmo de gradient boosting que ha demostrado un rendimiento excepcional en problemas de clasificación y regresión \cite{chen2016xgboost}. A diferencia de los algoritmos tradicionales de aprendizaje supervisado, XGBoost construye un conjunto de árboles de decisión de manera secuencial, donde cada árbol subsecuente intenta corregir los errores de los árboles anteriores.
+
+La función objetivo que XGBoost minimiza durante el entrenamiento incorpora tanto el error de predicción como un término de regularización para controlar la complejidad del modelo y prevenir el sobreajuste \cite{chen2016xgboost}:
+
+\begin{equation}
+\text{Obj} = \sum_{i=1}^{n} L(y_i, \hat{y}_i) + \sum_{k=1}^{K} \Omega(f_k)
+\end{equation}
+
+Donde $L$ representa la función de pérdida que mide la discrepancia entre las predicciones y los valores reales, y $\Omega$ es el término de regularización que penaliza la complejidad de cada árbol. Esta formulación permite que el algoritmo encuentre un balance óptimo entre precisión predictiva y generalización.
+
+El proceso de construcción de árboles en XGBoost utiliza una aproximación de segundo orden de la función objetivo mediante expansión de Taylor, lo que resulta en un algoritmo computacionalmente más eficiente que los métodos tradicionales de gradient boosting \cite{friedman2001greedy}. Esta aproximación permite calcular directamente la ganancia óptima de cada división del árbol, facilitando la poda de ramas que no contribuyen significativamente a la mejora del modelo.
+
+XGBoost incorpora regularización L1 (Lasso) y L2 (Ridge) simultáneamente, lo que proporciona flexibilidad para controlar tanto el número de características activas como la magnitud de los pesos asignados a cada característica \cite{friedman2001greedy}. La regularización L1 promueve la esparsidad en las soluciones, eliminando efectivamente características irrelevantes, mientras que la regularización L2 suaviza los pesos para mejorar la estabilidad del modelo.
+
+Entre las ventajas técnicas que distinguen a XGBoost de otros algoritmos de gradient boosting se encuentran: el manejo eficiente de valores faltantes mediante la asignación automática de una dirección predeterminada en cada división del árbol, la paralelización del proceso de construcción de árboles que aprovecha arquitecturas de múltiples núcleos, el sistema de caché optimizado que reduce el acceso a memoria y mejora la velocidad computacional, y el soporte nativo para validación cruzada durante el entrenamiento \cite{chen2016xgboost}.
+
+En el contexto específico de la predicción de riesgo crediticio, XGBoost ha demostrado ventajas particulares debido a su capacidad para capturar interacciones complejas entre variables sin requerir especificación explícita de términos de interacción \cite{lessmann2015benchmarking}. Por ejemplo, puede identificar automáticamente que la combinación de días de atraso histórico con ubicación geográfica y estacionalidad tiene mayor poder predictivo que cada variable individual considerada aisladamente.
+
+\subsubsection{Comparación con otros algoritmos en riesgo crediticio}
+La selección del algoritmo apropiado para modelos de scoring crediticio requiere considerar múltiples dimensiones de evaluación, incluyendo precisión predictiva, interpretabilidad, velocidad computacional y robustez ante datos desbalanceados \cite{lessmann2015benchmarking}.
+
+Los algoritmos de regresión logística, ampliamente utilizados en la industria financiera tradicional, ofrecen la ventaja de coeficientes fácilmente interpretables que pueden explicarse a reguladores y stakeholders \cite{baesens2003benchmarking}. Sin embargo, su capacidad predictiva está limitada por la asunción de relaciones lineales entre variables y la dificultad para capturar interacciones complejas sin ingeniería manual de características.
+
+Los modelos de Random Forest, que construyen múltiples árboles de decisión sobre submuestras aleatorias de datos y características, proporcionan robustez contra el sobreajuste y capacidad para manejar relaciones no lineales \cite{breiman2001random}. No obstante, en estudios comparativos de riesgo crediticio, Random Forest ha mostrado un rendimiento ligeramente inferior a XGBoost, particularmente en datasets con alta dimensionalidad y desbalance de clases \cite{lessmann2015benchmarking}.
+
+Las redes neuronales profundas han ganado atención reciente en aplicaciones de scoring crediticio debido a su capacidad para aprender representaciones jerárquicas de características \cite{xia2017novel}. Sin embargo, requieren conjuntos de datos significativamente más grandes para entrenamiento efectivo, presentan desafíos en términos de interpretabilidad, y su ventaja sobre métodos de ensemble como XGBoost no es consistente en datasets de tamaño mediano típicos del sector mayorista.
+
+Las máquinas de vectores de soporte (SVM) con kernels no lineales pueden capturar fronteras de decisión complejas, pero su escalabilidad está limitada en datasets grandes y su proceso de entrenamiento es computacionalmente más costoso que XGBoost \cite{huang2007credit}. Además, la selección del kernel apropiado y el ajuste de hiperparámetros requiere considerable experimentación.
+
+En estudios empíricos que comparan múltiples algoritmos en problemas de credit scoring, XGBoost ha demostrado consistentemente un rendimiento superior o comparable al mejor algoritmo en cada estudio, con la ventaja adicional de menor tiempo de entrenamiento y mayor flexibilidad en el manejo de tipos de datos mixtos \cite{lessmann2015benchmarking,xia2017novel}.
+
 \section{Metodología CRISP-DM}
 \subsection{Descripción y fases}
 CRISP-DM (Cross-Industry Standard Process for Data Mining) es una metodología ampliamente adoptada para proyectos de minería de datos y machine learning. Consta de seis fases interconectadas \cite{hernandez2020metodologia}:
@@ -91,6 +125,17 @@ CRISP-DM (Cross-Industry Standard Process for Data Mining) es una metodología a
 CRISP-DM ha sido seleccionada como metodología para este proyecto debido a su enfoque estructurado y orientado a resultados empresariales. A diferencia de otras metodologías como KDD (Knowledge Discovery in Databases) o SEMMA (Sample, Explore, Modify, Model, Assess), CRISP-DM pone un mayor énfasis en la comprensión del contexto de negocio antes de iniciar el análisis técnico \cite{hernandez2020metodologia}.
 
 Además, CRISP-DM facilita un enfoque iterativo que permite refinar continuamente el modelo basándose en los resultados obtenidos, lo que resulta especialmente valioso en el contexto dinámico del riesgo crediticio en el sector mayorista ecuatoriano.
+
+\subsection{Casos de éxito y validación empírica}
+La metodología CRISP-DM ha sido aplicada exitosamente en numerosos proyectos de minería de datos en contextos empresariales diversos, validando su utilidad como marco estructurado para iniciativas de analítica avanzada \cite{martinez2019crisp}.
+
+En el sector financiero, un caso documentado en instituciones bancarias europeas describe la implementación de CRISP-DM para desarrollar modelos de detección de fraude en transacciones con tarjeta de crédito \cite{wirth2000crisp}. El proyecto siguió las seis fases metodológicas, comenzando con la comprensión del negocio donde se identificó que el costo de falsos positivos (bloqueo de transacciones legítimas) era significativamente mayor que el costo de falsos negativos. Esta comprensión del contexto de negocio influyó directamente en la selección de métricas de evaluación y umbrales de decisión en fases posteriores.
+
+En el sector retail, estudios de caso en cadenas de supermercados latinoamericanos han documentado la aplicación de CRISP-DM para desarrollar sistemas de recomendación personalizados y modelos de predicción de demanda \cite{chapman2000crisp}. La fase de comprensión de los datos reveló patrones de estacionalidad específicos del mercado local que no estaban presentes en modelos desarrollados en otras geografías, lo que llevó a la incorporación de features temporales personalizadas en la fase de preparación de datos.
+
+En aplicaciones de credit scoring específicamente, casos en instituciones de microfinanzas asiáticas ilustran la aplicación sistemática de CRISP-DM para desarrollar modelos predictivos de morosidad en poblaciones con escaso historial crediticio formal \cite{martinez2019crisp}. La metodología facilitó la iteración entre las fases de modelado y evaluación, donde múltiples algoritmos fueron probados y comparados antes de seleccionar el modelo final para despliegue.
+
+Un aspecto crítico del éxito documentado en estos casos es la naturaleza iterativa de CRISP-DM, que permite regresar a fases anteriores cuando se descubren insights nuevos o limitaciones en fases posteriores \cite{wirth2000crisp}. Por ejemplo, durante la fase de modelado podría descubrirse que ciertas variables importantes no fueron adecuadamente transformadas en la fase de preparación de datos, permitiendo iterar hacia atrás para mejorar el procesamiento.
 
 \section{Sistemas de Información para la gestión de riesgo crediticio}
 \subsection{Arquitecturas de sistemas de información}
@@ -159,3 +204,16 @@ La gestión de riesgo crediticio en el sector mayorista ecuatoriano enfrenta des
 \end{itemize}
 
 Estos desafíos representan tanto obstáculos como oportunidades para la implementación de modelos predictivos avanzados que puedan capturar y adaptarse a estas particularidades \cite{torres2023inteligencia}.
+
+\subsection{Aplicaciones de Machine Learning en gestión crediticia latinoamericana}
+La adopción de técnicas de machine learning para la gestión de riesgo crediticio en Latinoamérica ha experimentado un crecimiento significativo en la última década, impulsada por la digitalización del sector financiero y la disponibilidad creciente de datos transaccionales \cite{barroso2022machine}.
+
+En Brasil, diversos estudios han documentado la implementación exitosa de modelos predictivos en instituciones de microfinanzas, donde los métodos tradicionales de scoring crediticio mostraban limitaciones debido a la escasez de historial crediticio formal de los clientes \cite{oreski2014genetic}. La incorporación de variables alternativas como datos de transacciones móviles, patrones de consumo de servicios públicos y comportamiento de compra permitió mejorar significativamente la precisión de las predicciones de morosidad.
+
+En Colombia, investigaciones recientes han explorado la aplicación de técnicas de ensemble learning, incluyendo XGBoost y Random Forest, en carteras comerciales de pequeñas y medianas empresas \cite{pena2021credit}. Los resultados indicaron que la incorporación de variables macroeconómicas regionales y factores de estacionalidad sectorial mejoró la capacidad predictiva de los modelos en un rango del quince al veinte por ciento en comparación con modelos tradicionales basados únicamente en variables financieras.
+
+En el contexto ecuatoriano específicamente, el sistema financiero ha comenzado a explorar metodologías de analítica avanzada, aunque la adopción en el sector mayorista B2B permanece en etapas iniciales. La particularidad del mercado ecuatoriano, caracterizado por una economía dolarizada y alta informalidad en ciertos sectores, presenta desafíos únicos que requieren adaptaciones de los modelos desarrollados en otras geografías.
+
+Un factor diferenciador en los modelos de riesgo crediticio para Latinoamérica es la necesidad de incorporar variables contextuales que capturan la volatilidad económica característica de mercados emergentes \cite{barroso2022machine}. La inclusión de indicadores como fluctuaciones en tasas de cambio paralelas, variaciones en precios de commodities relevantes al sector y ciclos políticos ha demostrado mejorar la robustez de las predicciones durante períodos de inestabilidad.
+
+La literatura también destaca la importancia de considerar factores culturales en el comportamiento de pago en Latinoamérica, donde las relaciones comerciales personalizadas y la negociación flexible de términos de pago son más prevalentes que en mercados desarrollados \cite{pena2021credit}. Los modelos que incorporan variables que capturan la antigüedad y calidad de la relación comercial han mostrado mejor desempeño que aquellos que se enfocan exclusivamente en métricas financieras.
